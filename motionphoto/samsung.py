@@ -11,11 +11,17 @@ class SamsungTag:
     marker: bytes
 
 
+@dataclass
+class SamsungTrailer:
+    data: bytes
+    negative_video_offset: int
+
+
 class SamsungMarker(Enum):
     EmbeddedVideo = b"\x00\x00\x30\x0A"
 
 
-def create_samsung_motion_trailer(video: Path) -> bytes:
+def create_samsung_motion_trailer(video: Path) -> SamsungTrailer:
 
     # build up trailer
     trailer = bytearray()
@@ -31,6 +37,7 @@ def create_samsung_motion_trailer(video: Path) -> bytes:
     trailer += b"MotionPhoto_Data"                # data
 
     # write EmbeddedVideoFile
+    video_offset_positive = len(trailer)
     with open(video, 'rb') as f:
         trailer += f.read()
 
@@ -55,4 +62,5 @@ def create_samsung_motion_trailer(video: Path) -> bytes:
     trailer += b"SEFT"                           # tail marker
 
     # return finished trailer
-    return bytes(trailer)
+    video_offset_negative = len(trailer) - video_offset_positive
+    return SamsungTrailer(data=bytes(trailer), negative_video_offset=video_offset_negative)
