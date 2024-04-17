@@ -3,6 +3,13 @@ import struct
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
+from typing import Optional
+
+from .exiftool import write_metadata_tags
+
+
+class SamsungMarker(Enum):
+    EmbeddedVideo = b"\x00\x00\x30\x0A"
 
 
 @dataclass
@@ -17,8 +24,18 @@ class SamsungTrailer:
     negative_video_offset: int
 
 
-class SamsungMarker(Enum):
-    EmbeddedVideo = b"\x00\x00\x30\x0A"
+def write_samsung_motion_metadata(motion: Path, negative_video_offset: int, timestamp_us: Optional[int] = None) -> None:
+
+    # metadata tags required by Samsung
+    tags = [
+        "-MotionPhoto=1",
+        "-MotionPhotoVersion=1",
+    ]
+    if timestamp_us is not None:
+        tags.append(f"-MotionPhotoPresentationTimestampUs={timestamp_us}")
+
+    # write metadata tags
+    write_metadata_tags(motion, tags)
 
 
 def create_samsung_motion_trailer(video: Path) -> SamsungTrailer:
