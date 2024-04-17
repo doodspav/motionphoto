@@ -3,7 +3,7 @@ from pathlib import Path
 from .exiftool import write_metadata_tags
 
 
-def write_google_motion_metadata(motion: Path, negative_video_offset: int, timestamp_us: int = -1) -> None:
+def write_google_motion_metadata(*, motion: Path, negative_video_offset: int, timestamp_us: int = -1) -> None:
 
     # metadata tags required by Google
     tags = [
@@ -14,4 +14,4 @@ def write_google_motion_metadata(motion: Path, negative_video_offset: int, times
     ]
 
     # write metadata tags
-    write_metadata_tags(motion, tags)
+    write_metadata_tags(media=motion, tags=tags)

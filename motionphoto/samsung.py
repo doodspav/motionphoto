@@ -24,7 +24,7 @@ class SamsungTrailer:
     negative_video_offset: int
 
 
-def write_samsung_motion_metadata(motion: Path, negative_video_offset: int, timestamp_us: Optional[int] = None) -> None:
+def write_samsung_motion_metadata(*, motion: Path, timestamp_us: Optional[int] = None) -> None:
 
     # metadata tags required by Samsung
     tags = [
@@ -35,10 +35,10 @@ def write_samsung_motion_metadata(motion: Path, negative_video_offset: int, time
         tags.append(f"-MotionPhotoPresentationTimestampUs={timestamp_us}")
 
     # write metadata tags
-    write_metadata_tags(motion, tags)
+    write_metadata_tags(media=motion, tags=tags)
 
 
-def create_samsung_motion_trailer(video: Path) -> SamsungTrailer:
+def create_samsung_motion_trailer(*, video: Path) -> SamsungTrailer:
 
     # build up trailer
     trailer = bytearray()

@@ -3,7 +3,7 @@ import subprocess
 from pathlib import Path
 
 
-def write_metadata_tags(media: Path, tags: [str]) -> None:
+def write_metadata_tags(*, media: Path, tags: [str]) -> None:
 
     # write metadata tags
     config = Path(__file__).resolve().parent / "exiftool.config.pl"
