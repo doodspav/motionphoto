@@ -5,6 +5,10 @@ from pathlib import Path
 
 def write_metadata_tags(*, media: Path, tags: [str]) -> None:
 
+    # short circuit if we don't have any tags
+    if not tags:
+        return
+
     # write metadata tags
     config = Path(__file__).resolve().parent / "exiftool.config.pl"
     cmd = ["exiftool", "-config", str(config), "-overwrite_original", "-ignoreMinorErrors", *tags, str(media)]
