@@ -4,6 +4,12 @@ from pathlib import Path
 
 
 def write_metadata_tags(*, media: Path, tags: [str]) -> None:
+    """
+    Write metadata tags to a media file using the command line tool 'exiftool'.
+
+    :param media: Existing input media file whose metadata will be updated with the tags.
+    :param tags: List of tags to be written to the media file.
+    """
 
     # short circuit if we don't have any tags
     if not tags:

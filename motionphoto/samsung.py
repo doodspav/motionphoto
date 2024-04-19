@@ -25,6 +25,12 @@ class SamsungTrailer:
 
 
 def write_samsung_motion_metadata(*, motion: Path, timestamp_us: Optional[int] = None) -> None:
+    """
+    Write metadata required by Samsung's implementation of Motion Photos to file.
+
+    :param motion: Existing Motion Photo file path.
+    :param timestamp_us: Optional key-frame time offset in microseconds.
+    """
 
     # metadata tags required by Samsung
     tags = [
@@ -39,6 +45,14 @@ def write_samsung_motion_metadata(*, motion: Path, timestamp_us: Optional[int] =
 
 
 def create_samsung_motion_trailer(*, video: Path) -> SamsungTrailer:
+    """
+    Create trailer data required by Samsung's implementation of Motion Photos that can be
+    appended verbatim to an image file.
+
+    :param video: Existing input video file path whose contents will be embedded.
+    :return: Raw trailer data in bytes, and byte offset from the end of the trailer to the
+             start of the embedded video file.
+    """
 
     # build up trailer
     trailer = bytearray()

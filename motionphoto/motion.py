@@ -11,15 +11,15 @@ from .google import write_google_motion_metadata
 def create_motion_photo(*, image: Path, video: Path, motion: Path,
                         timestamp_us: Optional[int] = None, overwrite: bool = False) -> None:
     """
-    Creates a Motion Photo from an input image and video.
+    Create a Motion Photo from an input image and video.
 
     If no timestamp_us is passed, this function will attempt to determine the correct
     value from the metadata in the image and video files. If no timestamp can be determined,
     then it will fall back to an empty default.
 
-    :param image: Input image file, format should support exif data.
-    :param video: Input video file.
-    :param motion: Output file path where Motion Photo will be created.
+    :param image: Existing input image file path, format should support exif data.
+    :param video: Existing input video file path.
+    :param motion: Output file path where Motion Photo will be created or overwritten.
     :param timestamp_us: Optional key-frame time offset in microseconds.
     :param overwrite: Overwrite existing file (otherwise raise an exception).
     """
