@@ -78,7 +78,7 @@ def create_samsung_motion_trailer(*, video: Path) -> SamsungTrailer:
     tags.append(SamsungTag(offset=len(trailer), marker=b""))
     trailer += b"SEFH"               # head marker
     trailer += sef_version           # version
-    trailer += struct.pack("<I", 1)  # block count
+    trailer += struct.pack("<I", 1)  # field count
 
     # write info data for each tag (not including SEF)
     sef_offset: int = tags[-1].offset
