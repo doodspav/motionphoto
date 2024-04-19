@@ -34,12 +34,34 @@ on `PATH`. Alternatively, it can be installed using a package manager.
 
 ## Usage
 
+### Executable
+
 `motionphoto -i <imagePath> -v <videoPath> -m <outputPath> [-t_us <keyFrameOffset> --overwrite]`
+
+For the version run `motionphoto --version`, and for more information run `motionphoto --help`.
 
 Notes:
 - `<imagePath>` image format must be JPEG
 - `<keyFrameOffset>` is the image's time offset, in microseconds, from the start of the video file
 - `--overwrite` flag allows overwriting an existing file instead of returning an error
+
+### Python
+
+There is a single core function available as:
+```python
+from motionphoto import create_motion_photo
+```
+
+Documentation for how to use it can be found in the function's docstring, but the API is fairly
+self-explanatory:
+```python
+from pathlib import Path
+from typing import Optional
+
+def create_motion_photo(*, image: Path, video: Path, motion: Path,
+                        timestamp_us: Optional[int] = None, overwrite: bool = False) -> None:
+    pass
+```
 
 ## Motion Photo Format
 This section will cover the requirements to make a valid Motion Photo.  
