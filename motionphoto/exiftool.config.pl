@@ -10,8 +10,8 @@
         MicroVideoPresentationTimestampUs => { Writable => 'integer' },
 
         # Samsung
-        MotionPhoto =>                        { Writable => 'integer' },
-        MotionPhotoVersion =>                 { Writable => 'integer' },
+        MotionPhoto                        => { Writable => 'integer' },
+        MotionPhotoVersion                 => { Writable => 'integer' },
         MotionPhotoPresentationTimestampUs => { Writable => 'integer' },
     },
 );
