@@ -3,7 +3,7 @@ Python library for creating Google and Samsung compatible Motion Photos.
 
 Most notably this can be used to convert Live Photos downloaded from iCloud 
 (where each photo comes as a separate image and video file) into Motion Photos that users
-with Android can use.
+with Android can experience.
 
 ## Table of Contents
 <!--ts-->
@@ -29,8 +29,8 @@ $ py -m pip install motionphoto
 
 This library has a dependency on `exiftool`.
 
-Instructions for installing it can be found [here](https://exiftool.org/install.html) and it must be available on
-`PATH`, or it can be installed with a package manager.
+Instructions for installing `exiftool` can be found [here](https://exiftool.org/install.html), and it must be installed
+on `PATH`. Alternatively, it can be installed using a package manager.
 
 ## Usage
 
@@ -38,7 +38,7 @@ Instructions for installing it can be found [here](https://exiftool.org/install.
 
 Notes:
 - `<imagePath>` image format must be JPEG
-- `<keyFrameOffset>` is where the image is, in microseconds, from the start of the video file
+- `<keyFrameOffset>` is the image's time offset, in microseconds, from the start of the video file
 - `--overwrite` flag allows overwriting an existing file instead of returning an error
 
 ## Motion Photo Format
@@ -52,7 +52,7 @@ Google requires that the video file be embedded inside the image file, however n
 placed on how this should be done. The video file is commonly appended to the end of the image file.
 
 #### Photos
-The Google Photos app requires, at a minimum, the following metadata tags to be set on the image:
+The Google Photos app, at a minimum, requires the following metadata tags to be set on the image:
 - `MicroVideo`: set to `1`
 - `MicroVideoVersion`: this library sets it to `1`
 - `MicroVideoOffset`: offset in bytes from the end of the Motion Photo file to the start of the embedded video file
@@ -97,7 +97,7 @@ for each field: [\x00\x00][field_marker_value(ule16)][field_offset_from_sef(ule3
 ```
 The `sef_size` is the size of that whole section not including `"SEFH"` and `"SEFT"` (head and tail markers).
 
-In our case (assuming `tsbsef` is the trailer size before SEF) we want:
+In our case (assuming `tsbsef` is the trailer size before the start of the SEF section), we want:
 ```
   head      count      marker                field size      tail
   ∨∨∨∨        ∨  ∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨            ∨∨∨∨∨∨∨       ∨∨∨∨
@@ -105,6 +105,9 @@ In our case (assuming `tsbsef` is the trailer size before SEF) we want:
          ∧∧∧                         ∧∧∧∧∧∧∧∧           ∧∧
        version                     field offset       sef size
 ```
+
+The `field_size` and `field_offset` are both encoded as little-endian 32bit integers. This imposes a limit on the size
+of the video file, namely that its size (plus the start of the SEF section) cannot exceed `2 ^ 32 - 1`.
 
 #### Metadata
 The following metadata tags may optionally be set:
@@ -115,6 +118,7 @@ The following metadata tags may optionally be set:
 Samsung does not place any requirements on the file name.
 
 ## Future:
+- add a CHANGELOG.md file
 - attempt to parse key frame timestamp from Live Photo (discussed [here]())
 - write `XMP-Container:Directory` data for Samsung (discussed [here](https://github.com/exiftool/exiftool/issues/254))
 - add support for working with whole directories
