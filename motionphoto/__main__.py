@@ -12,7 +12,7 @@ CLI_PATH_FIN = click.Path(exists=True, path_type=Path, readable=True, file_okay=
 CLI_PATH_FOUT = click.Path(exists=False, path_type=Path, readable=True, writable=True, file_okay=True, dir_okay=False)
 
 
-def validate_motion_path(ctx, param, value: Path) -> Path:
+def validate_motion_path(_ctx, _param, value: Path) -> Path:
     if not value.name.startswith("MV"):
         raise click.BadParameter("Motion Photo names must start with 'MV' to be playable in Google Gallery")
     return value
@@ -23,8 +23,9 @@ def validate_motion_path(ctx, param, value: Path) -> Path:
 @click.option("-i", "--image", required=True, type=CLI_PATH_FIN, help="Input image file path")
 @click.option("-v", "--video", required=True, type=CLI_PATH_FIN, help="Input video file path")
 @click.option("-m", "--motion", required=True, type=CLI_PATH_FOUT, callback=validate_motion_path,
-              help="Output motion photo file path")
-@click.option("-t_us", "--timestamp_us", type=int, help="Key-frame time offset in microseconds")
+              help="Output motion photo file path (name must start with 'MV')")
+@click.option("-t_us", "--timestamp_us", type=int,
+              help="Key-frame time offset in microseconds (may be derived from image/video inputs if omitted)")
 @click.option("--overwrite/--no-overwrite", default=False)
 def cli_file(image: Path, video: Path, motion: Path, timestamp_us: Optional[int], overwrite: bool):
     create_motion_photo(image=image, video=video, motion=motion, timestamp_us=timestamp_us, overwrite=overwrite)
