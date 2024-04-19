@@ -27,7 +27,8 @@ Windows:
 $ py -m pip install motionphoto
 ```
 
-This library has a dependency on `exiftool`.  
+This library has a dependency on `exiftool`.
+
 Instructions for installing it can be found [here](https://exiftool.org/install.html) and it must be available on
 `PATH`, or it can be installed with a package manager.
 
@@ -36,8 +37,8 @@ Instructions for installing it can be found [here](https://exiftool.org/install.
 `motionphoto -i <imagePath> -v <videoPath> -m <outputPath> [-t_us <keyFrameOffset> --overwrite]`
 
 Notes:
-- `-i` image format must be JPEG
-- `-t_us` is in microseconds, from the start of the video file
+- `<imagePath>` image format must be JPEG
+- `<keyFrameOffset>` is where the image is, in microseconds, from the start of the video file
 - `--overwrite` flag allows overwriting an existing file instead of returning an error
 
 ## Motion Photo Format
