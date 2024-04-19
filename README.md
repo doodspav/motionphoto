@@ -33,11 +33,12 @@ Instructions for installing it can be found [here](https://exiftool.org/install.
 
 ## Usage
 
-`motionphoto -i <imagePath> -v <videoPath> -m <outputPath> [-t_us <keyFrameOffsetTimeStampMilliseconds> --overwrite]`
+`motionphoto -i <imagePath> -v <videoPath> -m <outputPath> [-t_us <keyFrameOffset> --overwrite]`
 
-The `--overwrite` flag lets `motionphoto` overwrite an existing file instead of returning an error.
-
-The input image format must be JPEG.
+Notes:
+- `-i` image format must be JPEG
+- `-t_us` is in microseconds, from the start of the video file
+- `--overwrite` flag allows overwriting an existing file instead of returning an error
 
 ## Motion Photo Format
 This section will cover the requirements to make a valid Motion Photo.  
