@@ -24,11 +24,11 @@ class SamsungTrailer:
     negative_video_offset: int
 
 
-def write_samsung_motion_metadata(*, motion: Path, timestamp_us: Optional[int] = None) -> None:
+def write_samsung_motion_metadata(*, media: Path, timestamp_us: Optional[int] = None) -> None:
     """
     Update existing media file with metadata required by Samsung's implementation of Motion Photos.
 
-    :param motion: Existing media file path.
+    :param media: Existing media file path.
     :param timestamp_us: Optional key-frame time offset in microseconds.
     """
 
@@ -41,7 +41,7 @@ def write_samsung_motion_metadata(*, motion: Path, timestamp_us: Optional[int] =
         tags.append(f"-MotionPhotoPresentationTimestampUs={timestamp_us}")
 
     # write metadata tags
-    write_metadata_tags(media=motion, tags=tags)
+    write_metadata_tags(media=media, tags=tags)
 
 
 def create_samsung_motion_trailer(*, video: Path) -> SamsungTrailer:

@@ -50,6 +50,6 @@ def create_motion_photo(*, image: Path, video: Path, motion: Path,
         f.write(samsung_trailer.data)
 
     # write metadata required by Samsung and Google
-    write_samsung_motion_metadata(motion=motion, timestamp_us=timestamp_us)
-    write_google_motion_metadata(motion=motion, negative_video_offset=samsung_trailer.negative_video_offset,
+    write_samsung_motion_metadata(media=motion, timestamp_us=timestamp_us)
+    write_google_motion_metadata(media=motion, negative_video_offset=samsung_trailer.negative_video_offset,
                                  timestamp_us=timestamp_us)
