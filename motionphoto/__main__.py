@@ -67,14 +67,16 @@ def validate_motion_file(_ctx, _param, value: Path) -> Path:
 @click.option("--overwrite/--no-overwrite", default=False)
 def cli_file(image: Path, video: Path, motion: Path, timestamp_us: Optional[int], overwrite: bool):
 
-    # check if motion file exists here, to give a better error message
-    if motion.exists() and not overwrite:
-        print(f"Error: Output motion photo file already exists: '{motion}' (try using --overwrite)")
-        exit(1)
-
     # create motion photo
     try:
         create_motion_photo(image=image, video=video, motion=motion, timestamp_us=timestamp_us, overwrite=overwrite)
+
+    # specifically catch this error to provide helpful tip about --overwrite
+    except FileExistsError:
+        print(f"Error: Output motion photo file already exists: '{motion}' (try using --overwrite)")
+        exit(1)
+
+    # deal with all other errors
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr, flush=True)
         exit(1)
