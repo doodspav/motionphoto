@@ -64,7 +64,8 @@ def validate_motion_file(_ctx, _param, value: Path) -> Path:
               help="Output motion photo file path (name must start with 'MV')")
 @click.option("-t_us", "--timestamp_us", type=click.IntRange(min=0),
               help="Key-frame time offset in microseconds (may be derived from image/video inputs if omitted)")
-@click.option("--overwrite/--no-overwrite", default=False)
+@click.option("--overwrite/--no-overwrite", default=False,
+              help="Overwrite existing motion photo file instead of returning an error")
 def cli_file(image: Path, video: Path, motion: Path, timestamp_us: Optional[int], overwrite: bool):
 
     # create motion photo
