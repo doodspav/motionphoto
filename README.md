@@ -118,7 +118,6 @@ The following metadata tags may optionally be set:
 Samsung does not place any requirements on the file name.
 
 ## Future:
-- add a CHANGELOG.md file
 - attempt to parse key frame timestamp from Live Photo (discussed [here]())
 - write `XMP-Container:Directory` data for Samsung (discussed [here](https://github.com/exiftool/exiftool/issues/254))
 - add support for working with whole directories
