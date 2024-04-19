@@ -11,7 +11,7 @@ from .google import write_google_motion_metadata
 def create_motion_photo(*, image: Path, video: Path, motion: Path,
                         timestamp_us: Optional[int] = None, overwrite: bool = False) -> None:
     """
-    Create a Motion Photo from an input image and video.
+    Create a Motion Photo from an existing input image and video.
 
     If no timestamp_us is passed, this function will attempt to determine the correct
     value from the metadata in the image and video files. If no timestamp can be determined,

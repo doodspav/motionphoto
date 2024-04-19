@@ -4,13 +4,13 @@ from typing import Optional
 from .exiftool import write_metadata_tags
 
 
-def write_google_motion_metadata(*, motion: Path, negative_video_offset: int,
+def write_google_motion_metadata(*, media: Path, negative_video_offset: int,
                                  timestamp_us: Optional[int] = None) -> None:
     """
-    Write metadata required by Google's implementation of Motion Photos to file.
+    Update existing media file with metadata required by Google's implementation of Motion Photos.
 
-    :param motion: Existing Motion Photo file path.
-    :param negative_video_offset: Byte offset from end of file to start of embedded video.
+    :param media: Existing media file path.
+    :param negative_video_offset: Byte offset from end of media file to start of embedded video.
     :param timestamp_us: Optional key-frame time offset in microseconds.
     """
 
@@ -23,4 +23,4 @@ def write_google_motion_metadata(*, motion: Path, negative_video_offset: int,
     ]
 
     # write metadata tags
-    write_metadata_tags(media=motion, tags=tags)
+    write_metadata_tags(media=media, tags=tags)
