@@ -29,4 +29,4 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   - `-v/--video <videoPath>`: (required) must be an existing readable file, no bigger than INT32_MAX bytes
   - `-m/--motion <outputPath>`: (required) must be a readable and writable path, must not exist unless `--overwrite`
   - `-t_us/--timestamp_us <keyFrameOffset>`: (optional) key-frame time offset in microseconds
-  - `--overwrite`: (optional) permit `outputPath` to be an existing file and overwrite it instead of returning an error
+  - `--(no-)overwrite`: (optional) permit `outputPath` to be an existing file and overwrite it instead of returning an error

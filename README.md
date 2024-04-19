@@ -9,7 +9,7 @@ with Android can experience.
 <!--ts-->
 * [Installation](#installation)
 * [Usage](#usage)
-* [Motion Photo Format](#motion-photo-format)
+* [Technical Implementation Details](#technical-implementation-details)
   * [Google](#google)
   * [Samsung](#samsung)
 * [Future](#future)
@@ -36,14 +36,26 @@ on `PATH`. Alternatively, it can be installed using a package manager.
 
 ### Executable
 
-`motionphoto -i <imagePath> -v <videoPath> -m <outputPath> [-t_us <keyFrameOffset> --overwrite]`
+The `motionphoto` executable takes the following options:
+- `-i/--image <imagePath>`: **(required)** an existing readable JPEG file which will become the key-frame
+- `-v/--video <videoPath>`: **(required)** an existing readable file, no bigger than `INT32_MAX` bytes
+- `-m/--motion <outputPath>`: **(required)** a readable and writable path, file must not exist unless `--overwrite`
+- `-t_us/--timestamp_us <keyFrameOffset>`: _(optional)_ key-frame time offset in microseconds from the start of the video
+- `--(no-)overwrite/`: _(optional)_ permit `<outputPath>` to be an existing file and overwrite it instead of returning an error
+
+Note: `<outputPath>`'s file name must start with `MV`.
+
+Putting that together we get this:
+```shell
+$ motionphoto -i <imagePath> -v <videoPath> -m <outputPath> [-t_us <keyFrameOffset> --(no-)overwrite]
+```
+
+Which with example parameters might look like:
+```shell
+$ motionphoto -i "data/IMG_1234.JPEG" -v "data/IMG_1234.MOV" -m "data/MVIMG_1234.JPEG" -t_us=100 --overwrite
+```
 
 For the version run `motionphoto --version`, and for more information run `motionphoto --help`.
-
-Notes:
-- `<imagePath>` image format must be JPEG
-- `<keyFrameOffset>` is the image's time offset, in microseconds, from the start of the video file
-- `--overwrite` flag allows overwriting an existing file instead of returning an error
 
 ### Python
 
@@ -63,11 +75,16 @@ def create_motion_photo(*, image: Path, video: Path, motion: Path,
     pass
 ```
 
-## Motion Photo Format
-This section will cover the requirements to make a valid Motion Photo.  
-Since each application/vendor has their own implementation, they also have separate requirements.
+## Technical Implementation Details
+This section will cover the reverse engineered binary specification of a Motion Photos.  
+This section is solely for information, and is NOT required to use the library.
 
-The image format should be JPEG, not HEIC. HEIC occassionally works, but is not reliable.
+Since each application/vendor has their own implementation, they also have separate specifications.
+The Motion Photos created by this library will work transparently across vendors without any input
+needed from the user. 
+
+The only common requirement is that the image format should be JPEG, not HEIC. HEIC occasionally
+works but is not reliable. This is already enforced by the library.
 
 ### Google
 Google requires that the video file be embedded inside the image file, however no requirements are
