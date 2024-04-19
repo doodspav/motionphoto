@@ -30,6 +30,8 @@ def write_samsung_motion_metadata(*, media: Path, timestamp_us: Optional[int] = 
 
     :param media: Existing media file path.
     :param timestamp_us: Optional key-frame time offset in microseconds.
+
+    :raise: RuntimeError: Calling 'exiftool' returned a non-zero exit code.
     """
 
     # metadata tags required by Samsung

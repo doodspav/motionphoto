@@ -1,4 +1,5 @@
 import click
+import sys
 
 from pathlib import Path
 from typing import Optional
@@ -28,7 +29,18 @@ def validate_motion_path(_ctx, _param, value: Path) -> Path:
               help="Key-frame time offset in microseconds (may be derived from image/video inputs if omitted)")
 @click.option("--overwrite/--no-overwrite", default=False)
 def cli_file(image: Path, video: Path, motion: Path, timestamp_us: Optional[int], overwrite: bool):
-    create_motion_photo(image=image, video=video, motion=motion, timestamp_us=timestamp_us, overwrite=overwrite)
+
+    # check if motion file exists here, to give a better error message
+    if motion.exists() and not overwrite:
+        print(f"Error: Output motion photo file already exists: '{motion}' (try using --overwrite)")
+        exit(1)
+
+    # create motion photo
+    try:
+        create_motion_photo(image=image, video=video, motion=motion, timestamp_us=timestamp_us, overwrite=overwrite)
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr, flush=True)
+        exit(1)
 
 
 if __name__ == "__main__":

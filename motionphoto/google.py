@@ -12,6 +12,8 @@ def write_google_motion_metadata(*, media: Path, negative_video_offset: int,
     :param media: Existing media file path.
     :param negative_video_offset: Byte offset from end of media file to start of embedded video.
     :param timestamp_us: Optional key-frame time offset in microseconds.
+
+    :raise: RuntimeError: Calling 'exiftool' returned a non-zero exit code.
     """
 
     # metadata tags required by Google
