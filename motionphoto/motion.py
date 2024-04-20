@@ -22,15 +22,18 @@ def create_motion_photo(
     """
     Create a Motion Photo from an existing input image and video.
 
-    The output file name must start with 'MV' to support Google Gallery playback.
+    The output file name must start with 'MV' to support Google Gallery
+    playback.
 
-    If no timestamp_us is passed, this function will attempt to determine the correct
-    value from the metadata in the image and video files. If no timestamp can be determined,
-    then it will fall back to an empty default.
+    If no timestamp_us is passed, this function will attempt to determine the
+    correct value from the metadata in the image and video files. If no
+    timestamp can be determined, then it will fall back to an empty default.
 
-    :param image: Existing input image file path, format should support exif data.
+    :param image: Existing input image file path, format should support exif
+                  data.
     :param video: Existing input video file path.
-    :param motion: Output file path where Motion Photo will be created or overwritten. Name must start with 'MV'.
+    :param motion: Output file path where Motion Photo will be created or
+                   overwritten. Name must start with 'MV'.
     :param timestamp_us: Optional key-frame time offset in microseconds.
     :param overwrite: Overwrite existing file (otherwise raise an exception).
 
@@ -38,7 +41,8 @@ def create_motion_photo(
     :raise FileExistsError: Output file exists and overwrite is False.
     :raise NameError: Output file name does not start with 'MV'.
     :raise RuntimeError: Calling 'exiftool' returned a non-zero exit code.
-    Additionally, any exception related to opening, reading, and writing files may be raised.
+    Additionally, any exception related to opening, reading, and writing files
+    may be raised.
     """
 
     # check input files exist
@@ -57,7 +61,8 @@ def create_motion_photo(
     # required for proper playback in Google Gallery app
     if not motion.name.startswith("MV"):
         raise NameError(
-            f"Motion Photo name must start with 'MV' for Google Gallery playback, path: '{motion}'"
+            "Motion Photo name must start with 'MV' for Google Gallery "
+            f"playback, path: '{motion}'"
         )
 
     # create output file from image
