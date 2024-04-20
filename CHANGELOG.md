@@ -5,11 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [NEXT] [Major] - 2024-04-10
+## [NEXT] [Major] - YYYY-MM-DD???
+
 ### Info
 - Initial release
 - Implementation is Python script calling `exiftool`
 - Requires `exiftool` to be installed on `PATH` by the user
+
 ### Added
 - Initial python interface (`motionphoto` package):
   - `.`: 
@@ -30,3 +32,10 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   - `-m/--motion <outputPath>`: (required) must be a readable and writable path, must not exist unless `--overwrite`
   - `-t_us/--timestamp_us <keyFrameOffset>`: (optional) key-frame time offset in microseconds
   - `--(no-)overwrite`: (optional) permit `outputPath` to be an existing file and overwrite it instead of returning an error
+
+### Developer:Added
+- Configuration and pre-commit support for the following static tools:
+  - `flake8`
+  - `black`
+  - `mypy`
+  - `pyolint`
