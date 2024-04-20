@@ -3,7 +3,7 @@ import struct
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional
 
 from .exiftool import write_metadata_tags
 
@@ -62,7 +62,7 @@ def create_samsung_motion_trailer(*, video: Path) -> SamsungTrailer:
 
     # build up trailer
     trailer = bytearray()
-    tags: [SamsungTag] = []
+    tags: List[SamsungTag] = []
 
     # constants
     sef_version = struct.pack("<I", 106)

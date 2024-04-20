@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-from . import create_motion_photo
+from .motion import create_motion_photo
 from . import __version__
 
 
@@ -29,7 +29,9 @@ CLI_PATH_FOUT = click.Path(
 )
 
 
-def validate_image_file(_ctx, _param, value: Path) -> Path:
+def validate_image_file(
+    _ctx: click.Context, _param: click.Option, value: Path
+) -> Path:
 
     # constants
     jpeg_mimes = ("image/jpeg", "image/jpg")  # second is non-standard
@@ -51,7 +53,9 @@ def validate_image_file(_ctx, _param, value: Path) -> Path:
     return value
 
 
-def validate_video_file(_ctx, _param, value: Path) -> Path:
+def validate_video_file(
+    _ctx: click.Context, _param: click.Option, value: Path
+) -> Path:
 
     # check that file size fits in signed 32bit integer
     # if it's bigger, we may not be able to write file offset in metadata
@@ -64,7 +68,9 @@ def validate_video_file(_ctx, _param, value: Path) -> Path:
     return value
 
 
-def validate_motion_file(_ctx, _param, value: Path) -> Path:
+def validate_motion_file(
+    _ctx: click.Context, _param: click.Option, value: Path
+) -> Path:
 
     # check that file name starts with 'MV'
     if not value.name.startswith("MV"):
@@ -121,7 +127,7 @@ def cli_file(
     motion: Path,
     timestamp_us: Optional[int],
     overwrite: bool,
-):
+) -> None:
 
     # create motion photo
     try:

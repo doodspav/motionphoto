@@ -1,9 +1,10 @@
 import subprocess
 
 from pathlib import Path
+from typing import List
 
 
-def write_metadata_tags(*, media: Path, tags: [str]) -> None:
+def write_metadata_tags(*, media: Path, tags: List[str]) -> None:
     """
     Update an existing media file with metadata tags using the command line tool
     'exiftool'.
