@@ -4,12 +4,21 @@ from pathlib import Path
 from typing import Optional
 
 from .samsung import SamsungTrailer
-from .samsung import create_samsung_motion_trailer, write_samsung_motion_metadata
+from .samsung import (
+    create_samsung_motion_trailer,
+    write_samsung_motion_metadata,
+)
 from .google import write_google_motion_metadata
 
 
-def create_motion_photo(*, image: Path, video: Path, motion: Path,
-                        timestamp_us: Optional[int] = None, overwrite: bool = False) -> None:
+def create_motion_photo(
+    *,
+    image: Path,
+    video: Path,
+    motion: Path,
+    timestamp_us: Optional[int] = None,
+    overwrite: bool = False,
+) -> None:
     """
     Create a Motion Photo from an existing input image and video.
 
@@ -40,12 +49,16 @@ def create_motion_photo(*, image: Path, video: Path, motion: Path,
 
     # check if output file exists
     if motion.exists() and not overwrite:
-        raise FileExistsError(f"Output motion photo file already exists: '{motion}'")
+        raise FileExistsError(
+            f"Output motion photo file already exists: '{motion}'"
+        )
 
     # check motion file name starts with MV
     # required for proper playback in Google Gallery app
     if not motion.name.startswith("MV"):
-        raise NameError(f"Motion Photo name must start with 'MV' for Google Gallery playback, path: '{motion}'")
+        raise NameError(
+            f"Motion Photo name must start with 'MV' for Google Gallery playback, path: '{motion}'"
+        )
 
     # create output file from image
     if not motion.parent.exists():
@@ -55,10 +68,13 @@ def create_motion_photo(*, image: Path, video: Path, motion: Path,
 
     # write trailer data required by Samsung
     samsung_trailer: SamsungTrailer = create_samsung_motion_trailer(video=video)
-    with open(motion, 'ab') as f:
+    with open(motion, "ab") as f:
         f.write(samsung_trailer.data)
 
     # write metadata required by Samsung and Google
     write_samsung_motion_metadata(media=motion, timestamp_us=timestamp_us)
-    write_google_motion_metadata(media=motion, negative_video_offset=samsung_trailer.negative_video_offset,
-                                 timestamp_us=timestamp_us)
+    write_google_motion_metadata(
+        media=motion,
+        negative_video_offset=samsung_trailer.negative_video_offset,
+        timestamp_us=timestamp_us,
+    )

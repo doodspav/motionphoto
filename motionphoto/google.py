@@ -4,8 +4,12 @@ from typing import Optional
 from .exiftool import write_metadata_tags
 
 
-def write_google_motion_metadata(*, media: Path, negative_video_offset: int,
-                                 timestamp_us: Optional[int] = None) -> None:
+def write_google_motion_metadata(
+    *,
+    media: Path,
+    negative_video_offset: int,
+    timestamp_us: Optional[int] = None,
+) -> None:
     """
     Update existing media file with metadata required by Google's implementation of Motion Photos.
 
@@ -21,7 +25,7 @@ def write_google_motion_metadata(*, media: Path, negative_video_offset: int,
         "-MicroVideo=1",
         "-MicroVideoVersion=1",
         f"-MicroVideoOffset={negative_video_offset}",
-        f"-MicroVideoPresentationTimestampUs={timestamp_us if timestamp_us is not None else -1}"
+        f"-MicroVideoPresentationTimestampUs={timestamp_us if timestamp_us is not None else -1}",
     ]
 
     # write metadata tags
