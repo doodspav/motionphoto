@@ -2,4 +2,4 @@ from .cli import cli_file
 
 
 if __name__ == "__main__":
-    cli_file()
+    cli_file()  # pylint: disable=E1120
