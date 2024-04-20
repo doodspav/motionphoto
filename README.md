@@ -7,6 +7,7 @@ with Android can experience.
 
 ## Table of Contents
 <!--ts-->
+* [Dependencies](#dependencies)
 * [Installation](#installation)
 * [Usage](#usage)
 * [Technical Implementation Details](#technical-implementation-details)
@@ -14,6 +15,13 @@ with Android can experience.
   * [Samsung](#samsung)
 * [Future](#future)
 <!--te-->
+
+## Dependencies
+
+This library has a dependency on the `exiftool` executable by Phil Harvey.
+
+Instructions for installing `exiftool` can be found [here](https://exiftool.org/install.html), and it must be installed
+on `PATH`. Alternatively, it can be installed using a package manager.
 
 ## Installation
 
@@ -26,11 +34,6 @@ Windows:
 ```shell
 $ py -m pip install motionphoto
 ```
-
-This library has a dependency on `exiftool`.
-
-Instructions for installing `exiftool` can be found [here](https://exiftool.org/install.html), and it must be installed
-on `PATH`. Alternatively, it can be installed using a package manager.
 
 ## Usage
 
