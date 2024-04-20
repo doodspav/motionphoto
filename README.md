@@ -35,6 +35,9 @@ Windows:
 $ py -m pip install motionphoto
 ```
 
+If you run either command with the system installation of Python rather than in a virtual environment, you may need to
+append `--break-system-packages` to the end of the command.
+
 ## Usage
 
 ### Executable
@@ -53,9 +56,9 @@ Putting that together we get this:
 $ motionphoto -i <imagePath> -v <videoPath> -m <outputPath> [-t_us <keyFrameOffset> --(no-)overwrite]
 ```
 
-Which with example parameters might look like:
+Which with dummy parameters, a minimal example might look like this:
 ```shell
-$ motionphoto -i "data/IMG_1234.JPEG" -v "data/IMG_1234.MOV" -m "data/MVIMG_1234.JPEG" -t_us=100 --overwrite
+$ motionphoto -i "data/IMG_1234.JPEG" -v "data/IMG_1234.MOV" -m "data/MVIMG_1234.JPEG"
 ```
 
 For the version run `motionphoto --version`, and for more information run `motionphoto --help`.
@@ -79,7 +82,7 @@ def create_motion_photo(*, image: Path, video: Path, motion: Path,
 ```
 
 ## Technical Implementation Details
-This section will cover the reverse engineered binary specification of a Motion Photos.  
+This section will cover the reverse engineered binary specification of Motion Photos.  
 This section is solely for information, and is NOT required to use the library.
 
 Since each application/vendor has their own implementation, they also have separate specifications.
@@ -158,9 +161,3 @@ The following metadata tags may optionally be set:
 - `MotionPhotoPresentationTimestampUs`: key-frame time offset in microseconds
 
 Samsung does not place any requirements on the file name.
-
-## Future:
-- attempt to parse key frame timestamp from Live Photo (discussed [here]())
-- write `XMP-Container:Directory` data for Samsung (discussed [here](https://github.com/exiftool/exiftool/issues/254))
-- add support for working with whole directories
-
