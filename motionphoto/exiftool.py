@@ -31,7 +31,7 @@ def write_metadata_tags(*, media: Path, tags: List[str]) -> None:
         *tags,
         str(media),
     ]
-    res = subprocess.run(cmd, capture_output=True, text=True)
+    res = subprocess.run(cmd, capture_output=True, text=True, check=False)
 
     # handle failure
     if res.returncode != 0:

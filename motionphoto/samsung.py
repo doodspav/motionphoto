@@ -9,17 +9,36 @@ from .exiftool import write_metadata_tags
 
 
 class SamsungMarker(Enum):
-    EmbeddedVideo = b"\x00\x00\x30\x0A"
+    """Marker values for Samsung trailer fields."""
+
+    EMBEDDED_VIDEO = b"\x00\x00\x30\x0A"
 
 
 @dataclass
 class SamsungTag:
+    """
+    Represents data from Samsung trailer field written to SEF section.
+
+    :ivar int offset: Negative offset from the start of the SEF section to the
+                      start of the field in the trailer.
+    :ivar bytes marker: SamsungMarker value for the field.
+    """
+
     offset: int
     marker: bytes
 
 
 @dataclass
 class SamsungTrailer:
+    """
+    Minimal representation of the complete Samsung trailer needed for Motion
+    Photo creation.
+
+    :ivar bytes data: Raw bytes representing complete Samsung trailer.
+    :ivar int negative_video_offset: Negative offset from end of trailer to the
+                                     start of the embedded video in the trailer.
+    """
+
     data: bytes
     negative_video_offset: int
 
@@ -70,10 +89,10 @@ def create_samsung_motion_trailer(*, video: Path) -> SamsungTrailer:
     # write EmbeddedVideoType
     tags.append(
         SamsungTag(
-            offset=len(trailer), marker=SamsungMarker.EmbeddedVideo.value
+            offset=len(trailer), marker=SamsungMarker.EMBEDDED_VIDEO.value
         )
     )
-    trailer += SamsungMarker.EmbeddedVideo.value  # marker
+    trailer += SamsungMarker.EMBEDDED_VIDEO.value  # marker
     trailer += struct.pack("<I", 16)  # length
     trailer += b"MotionPhoto_Data"  # data
 

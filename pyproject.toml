@@ -11,3 +11,8 @@ strict = true
 [[tool.mypy.overrides]]
 module = "filetype"
 ignore_missing_imports = true
+
+[tool.pylint.MASTER]
+disable = [
+    "missing-module-docstring"
+]

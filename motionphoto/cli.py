@@ -1,10 +1,11 @@
-import click
-import filetype
 import mimetypes
 import sys
 
 from pathlib import Path
 from typing import Optional
+
+import click
+import filetype
 
 from .motion import create_motion_photo
 from . import __version__
@@ -32,6 +33,16 @@ CLI_PATH_FOUT = click.Path(
 def validate_image_file(
     _ctx: click.Context, _param: click.Option, value: Path
 ) -> Path:
+    """
+    Check that file named by path has JPEG format.
+
+    :param _ctx: Library context.
+    :param _param: Command-line option parameter.
+    :param value: Path parameter value.
+    :return: Validated path.
+
+    :raise click.BadParameter: File named by path has JPEG format.
+    """
 
     # constants
     jpeg_mimes = ("image/jpeg", "image/jpg")  # second is non-standard
@@ -56,6 +67,16 @@ def validate_image_file(
 def validate_video_file(
     _ctx: click.Context, _param: click.Option, value: Path
 ) -> Path:
+    """
+    Check that file named by path is not bigger than INT32_MAX bytes.
+
+    :param _ctx: Library context.
+    :param _param: Command-line option parameter.
+    :param value: Path parameter value.
+    :return: Validated path.
+
+    :raise click.BadParameter: File named by path exceeds INT32_MAX bytes.
+    """
 
     # check that file size fits in signed 32bit integer
     # if it's bigger, we may not be able to write file offset in metadata
@@ -71,6 +92,16 @@ def validate_video_file(
 def validate_motion_file(
     _ctx: click.Context, _param: click.Option, value: Path
 ) -> Path:
+    """
+    Check that file name from path starts with 'MV'.
+
+    :param _ctx: Library context.
+    :param _param: Command-line option parameter.
+    :param value: Path parameter value.
+    :return: Validated path.
+
+    :raise click.BadParameter: File name from path does not start with 'MV'.
+    """
 
     # check that file name starts with 'MV'
     if not value.name.startswith("MV"):
@@ -128,6 +159,7 @@ def cli_file(
     timestamp_us: Optional[int],
     overwrite: bool,
 ) -> None:
+    """Handle command line usage of motionphoto."""
 
     # create motion photo
     try:
@@ -145,9 +177,7 @@ def cli_file(
             f"Error: Output motion photo file already exists: {motion} "
             "(try using --overwrite)"
         )
-        exit(1)
+        sys.exit(1)
 
-    # deal with all other errors
-    except Exception as e:
-        print(f"Error: {e}", file=sys.stderr, flush=True)
-        exit(1)
+    # allow all other exceptions to propagate to caller
+    # so that they can see the stack trace
