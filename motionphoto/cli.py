@@ -44,10 +44,6 @@ def validate_image_file(
     :raise click.BadParameter: File named by path is not JPEG.
     """
 
-    # constants
-    jpeg_mimes = ("image/jpeg", "image/jpg")  # second is non-standard
-    jpeg_exts = (".jpeg", ".jpg")
-
     # attempt to determine format
     guess = filetype.guess(value)
     mime: Optional[str] = (
@@ -55,9 +51,7 @@ def validate_image_file(
     )
 
     # check that format is JPEG
-    if (
-        mime is None and value.suffix not in jpeg_exts
-    ) or mime not in jpeg_mimes:
+    if mime not in ("image/jpeg", "image/jpg"):  # second is non-standard
         raise click.BadParameter("Input image file format must be JPEG")
 
     # success
