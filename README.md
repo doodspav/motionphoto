@@ -13,7 +13,6 @@ with Android can experience.
 * [Technical Implementation Details](#technical-implementation-details)
   * [Google](#google)
   * [Samsung](#samsung)
-* [Future](#future)
 <!--te-->
 
 ## Dependencies
