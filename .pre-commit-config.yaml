@@ -24,22 +24,47 @@ repos:
       - id: black
         args: [--check]
 
-  - repo: https://github.com/pycqa/flake8
-    rev: 7.0.0
+  - repo: local
     hooks:
       - id: flake8
+        name: flake8
+        language: script
+        types: [python]
+        entry: venv/bin/flake8
 
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.9.0
+  - repo: local
     hooks:
       - id: mypy
-        # make sure imports are available
+        name: mypy
+        language: script
+        types: [python]
         entry: venv/bin/mypy
 
-  - repo: https://github.com/pycqa/pylint
-    rev: v3.1.0
+  - repo: local
     hooks:
       - id: pylint
-        # make sure imports are available
+        name: pylint
+        language: script
+        types: [python]
         entry: venv/bin/pylint
         args: [--fail-under=10]
+
+  - repo: local
+    hooks:
+      - id: unittest-unit
+        name: unittest-unit
+        language: script
+        types: [python]
+        entry: venv/bin/python
+        args: [-m, coverage, run, --branch, -m, unittest, discover, -s, tests/unit]
+        pass_filenames: false
+
+  - repo: local
+    hooks:
+      - id: coverage
+        name: coverage
+        language: script
+        types: [python]
+        entry: venv/bin/python
+        args: [-m, coverage, report, --fail-under=100]
+        pass_filenames: false
