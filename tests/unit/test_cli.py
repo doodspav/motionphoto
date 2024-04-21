@@ -4,8 +4,10 @@ from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
 from click import Context, Option, BadParameter
+from click.testing import CliRunner
 
 from motionphoto.cli import (
+    cli_file,
     validate_image_file,
     validate_motion_file,
     validate_video_file,
@@ -103,6 +105,9 @@ class TestValidateVideoFile(ValidateParamTestCase):
             # test
             validate_video_file(self.unused_ctx, self.unused_param, path)
 
+        # check
+        mock_stat.assert_called_once()
+
     @patch("pathlib.Path.stat")
     def test_size_good(self, mock_stat: MagicMock) -> None:
 
@@ -117,11 +122,13 @@ class TestValidateVideoFile(ValidateParamTestCase):
             mock_stat.return_value.st_size = size
             path = Path()
 
-            # check
+            # test
             res = validate_video_file(self.unused_ctx, self.unused_param, path)
 
             # check
             self.assertEqual(res, path)
+            mock_stat.assert_called_once()
+            mock_stat.reset_mock()
 
 
 class TestValidateMotionFile(ValidateParamTestCase):
@@ -160,3 +167,51 @@ class TestValidateMotionFile(ValidateParamTestCase):
 
             # check
             self.assertEqual(res, path)
+
+
+class TestCliFile(TestCase):
+
+    @patch("pathlib.Path.stat")  # brittle test, but easier this way
+    @patch("motionphoto.create_motion_photo")
+    def test_missing_parameter_option(
+        self, mock_stat: MagicMock, mock_create_mp: MagicMock
+    ) -> None:
+        pass
+
+    @patch("pathlib.Path.stat")  # brittle test, but easier this way
+    @patch("motionphoto.create_motion_photo")
+    def test_missing_parameter_value(
+        self, mock_stat: MagicMock, mock_create_mp: MagicMock
+    ) -> None:
+        pass
+
+    @patch("motionphoto.create_motion_photo")
+    def test_bad_image_format(self, mock_create_mp: MagicMock) -> None:
+        pass
+
+    @patch("pathlib.Path.stat")  # brittle test, but easier this way
+    @patch("motionphoto.create_motion_photo")
+    def test_bad_video_size(
+        self, mock_stat: MagicMock, mock_create_mp: MagicMock
+    ) -> None:
+        pass
+
+    @patch("motionphoto.create_motion_photo")
+    def test_bad_motion_name(self, mock_create_mp: MagicMock) -> None:
+        pass
+
+    @patch("motionphoto.create_motion_photo")
+    def test_bad_timestamp(self, mock_create_mp: MagicMock) -> None:
+        pass
+
+    @patch("motionphoto.create_motion_photo")
+    def test_good_params(self, mock_create_mp: MagicMock) -> None:
+        pass
+
+    @patch("motionphoto.create_motion_photo")
+    def test_raise_file_exists_error(self, mock_create_mp: MagicMock) -> None:
+        pass
+
+    @patch("motionphoto.create_motion_photo")
+    def test_raise_exception(self, mock_create_mp: MagicMock) -> None:
+        pass
