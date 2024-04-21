@@ -40,7 +40,7 @@ repos:
         language: script
         types: [python]
         entry: venv/bin/mypy
-        exclude: ^tests
+        exclude: ^tests/
 
   - repo: local
     hooks:
@@ -50,7 +50,7 @@ repos:
         types: [python]
         entry: venv/bin/pylint
         args: [--fail-under=10]
-        exclude: ^tests
+        exclude: ^tests/
 
   - repo: local
     hooks:
