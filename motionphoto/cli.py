@@ -38,10 +38,10 @@ def validate_image_file(
 
     :param _ctx: Library context.
     :param _param: Command-line option parameter.
-    :param value: Path parameter value.
-    :return: Validated path.
+    :param value: Parameter value.
+    :return: Validated parameter value.
 
-    :raise click.BadParameter: File named by path has JPEG format.
+    :raise click.BadParameter: File named by path is not JPEG.
     """
 
     # constants
@@ -72,8 +72,8 @@ def validate_video_file(
 
     :param _ctx: Library context.
     :param _param: Command-line option parameter.
-    :param value: Path parameter value.
-    :return: Validated path.
+    :param value: Parameter value.
+    :return: Validated parameter value.
 
     :raise click.BadParameter: File named by path exceeds INT32_MAX bytes.
     """
@@ -97,8 +97,8 @@ def validate_motion_file(
 
     :param _ctx: Library context.
     :param _param: Command-line option parameter.
-    :param value: Path parameter value.
-    :return: Validated path.
+    :param value: Pameter value.
+    :return: Validated parameter value.
 
     :raise click.BadParameter: File name from path does not start with 'MV'.
     """
