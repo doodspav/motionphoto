@@ -696,6 +696,7 @@ class TestCliFile(TestCase):
         # check
         self.assertEqual(res.exit_code, 0)
         self.assertIn(motionphoto.__version__, res.output)
+        mock_create_mp.assert_not_called()
 
     @patch("motionphoto.cli.create_motion_photo")
     def test_help(self, mock_create_mp: MagicMock) -> None:
@@ -719,3 +720,4 @@ class TestCliFile(TestCase):
         ]
         for option in options:
             self.assertIn(option, res.output)
+        mock_create_mp.assert_not_called()
