@@ -1,4 +1,5 @@
 import os
+import traceback
 
 from copy import deepcopy
 from pathlib import Path
@@ -205,6 +206,9 @@ class TestCliFile(TestCase):
         # remove files we created
         os.remove(self._image_path_to_delete)
         os.remove(self._video_path_to_delete)
+        for p in [self.image_path, self.video_path, self.motion_path]:
+            if p.exists():
+                os.remove(p)
 
     @patch("motionphoto.create_motion_photo")
     def test_missing_parameter_option(self, mock_create_mp: MagicMock) -> None:
@@ -507,7 +511,7 @@ class TestCliFile(TestCase):
     ) -> None:
         pass
 
-    @patch("motionphot.create_motion_photo")
+    @patch("motionphoto.create_motion_photo")
     def test_both_bool_option_no_overwrite_last(
         self, mock_create_mp: MagicMock
     ) -> None:
@@ -527,7 +531,7 @@ class TestCliFile(TestCase):
             "-i", str(self.image_path),
             "-v", str(self.video_path),
             "-m", str(self.motion_path),
-            "-unknown_option"
+            "--unknown_option",
             # fmt: on
         ]
 
@@ -551,7 +555,7 @@ class TestCliFile(TestCase):
             "-i", str(self.image_path),
             "-v", str(self.video_path),
             "-m", str(self.motion_path),
-            "unknown_argument"
+            "unknown_argument",
             # fmt: on
         ]
 
