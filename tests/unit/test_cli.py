@@ -174,80 +174,91 @@ class TestValidateMotionFile(ValidateParamTestCase):
 
 class TestCliFile(TestCase):
 
+    def setUp(self) -> None:
+
+        # create required files
+        with NamedTemporaryFile("r", suffix=".jpeg", delete=False) as f:
+            self.image_path = Path(f.name)
+            self._image_path_to_delete = deepcopy(self.image_path)
+        with NamedTemporaryFile("r", suffix=".mov", delete=False) as f:
+            self.video_path = Path(f.name)
+            self._video_path_to_delete = deepcopy(self.video_path)
+        self.motion_path = Path("MV.jpeg")
+
+        # set permissions (read-only input files)
+        self.image_path.chmod(0o400)
+        self.video_path.chmod(0o400)
+
+        # check everything
+        for p in [self.image_path, self.video_path]:
+            self.assertTrue(p.exists())
+            self.assertTrue(os.access(p, os.R_OK))
+            self.assertFalse(os.access(p, os.W_OK))
+            self.assertFalse(os.access(p, os.X_OK))
+        self.assertLessEqual(
+            self.video_path.stat().st_size, TestValidateVideoFile.MAX_SIZE
+        )
+        self.assertFalse(self.motion_path.exists())
+
+    def tearDown(self) -> None:
+
+        # remove files we created
+        os.remove(self._image_path_to_delete)
+        os.remove(self._video_path_to_delete)
+
     @patch("motionphoto.create_motion_photo")
     def test_missing_parameter_option(self, mock_create_mp: MagicMock) -> None:
 
         # setup
         runner = CliRunner()
-        with NamedTemporaryFile("r", suffix=".jpeg") as f:
-            image_path = Path(f.name)
-            video_path = image_path
-            motion_path = Path("MV.jpeg")
-            param_pairs = [
-                ("-i", str(image_path)),
-                ("-v", str(video_path)),
-                ("-m", str(motion_path)),
-            ]
-            self.assertFalse(motion_path.exists())
-            self.assertLessEqual(
-                video_path.stat().st_size, TestValidateVideoFile.MAX_SIZE
-            )
+        param_pairs = [
+            ("-i", str(self.image_path)),
+            ("-v", str(self.video_path)),
+            ("-m", str(self.motion_path)),
+        ]
+        for i in range(len(param_pairs)):
+            use_param_pairs = deepcopy(param_pairs)
+            use_param_pairs.pop(i)
+            use_params = [p for pp in use_param_pairs for p in pp]
 
-            # continue setup
-            for i in range(len(param_pairs)):
-                use_param_pairs = (
-                    param_pairs[0:i] + param_pairs[i + 1 : len(param_pairs)]
-                )
-                use_params = [p for pp in use_param_pairs for p in pp]
+            # test
+            res = runner.invoke(cli_file, use_params)
 
-                # test
-                res = runner.invoke(cli_file, use_params)
-
-                # check
-                self.assertNotEqual(res.exit_code, 0)
-                for pp in param_pairs:
-                    if pp[0] == param_pairs[i][0]:
-                        self.assertTrue(pp[0] in res.output)
-                    else:
-                        self.assertFalse(pp[0] in res.output)
-                mock_create_mp.assert_not_called()
+            # check
+            self.assertNotEqual(res.exit_code, 0)
+            for pp in param_pairs:
+                if pp[0] == param_pairs[i][0]:
+                    self.assertTrue(pp[0] in res.output)
+                else:
+                    self.assertFalse(pp[0] in res.output)
+            mock_create_mp.assert_not_called()
 
     @patch("motionphoto.create_motion_photo")
     def test_missing_parameter_value(self, mock_create_mp: MagicMock) -> None:
 
         # setup
         runner = CliRunner()
-        with NamedTemporaryFile("r", suffix=".jpeg") as f:
-            image_path = Path(f.name)
-            video_path = image_path
-            motion_path = Path("MV.jpeg")
-            param_pairs = [
-                ("-i", str(image_path)),
-                ("-v", str(video_path)),
-                ("-m", str(motion_path)),
-            ]
-            self.assertFalse(motion_path.exists())
-            self.assertLessEqual(
-                video_path.stat().st_size, TestValidateVideoFile.MAX_SIZE
-            )
+        param_pairs = [
+            ("-i", str(self.image_path)),
+            ("-v", str(self.video_path)),
+            ("-m", str(self.motion_path)),
+        ]
+        for i in range(len(param_pairs)):
+            use_param_pairs = deepcopy(param_pairs)
+            use_param_pairs[i] = (use_param_pairs[0],)
+            use_params = [p for pp in use_param_pairs for p in pp]
 
-            # continue setup
-            for i in range(len(param_pairs)):
-                use_param_pairs = deepcopy(param_pairs)
-                use_param_pairs[i] = (use_param_pairs[0],)
-                use_params = [p for pp in use_param_pairs for p in pp]
+            # test
+            res = runner.invoke(cli_file, use_params)
 
-                # test
-                res = runner.invoke(cli_file, use_params)
-
-                # check
-                self.assertNotEqual(res.exit_code, 0)
-                for pp in param_pairs:
-                    if pp[0] == param_pairs[i][0]:
-                        self.assertTrue(pp[0] in res.output)
-                    else:
-                        self.assertFalse(pp[0] in res.output)
-                mock_create_mp.assert_not_called()
+            # check
+            self.assertNotEqual(res.exit_code, 0)
+            for pp in param_pairs:
+                if pp[0] == param_pairs[i][0]:
+                    self.assertTrue(pp[0] in res.output)
+                else:
+                    self.assertFalse(pp[0] in res.output)
+            mock_create_mp.assert_not_called()
 
     @patch("motionphoto.create_motion_photo")
     def test_bad_image_format(self, mock_create_mp: MagicMock) -> None:
@@ -255,20 +266,14 @@ class TestCliFile(TestCase):
         # setup
         runner = CliRunner()
         with NamedTemporaryFile("r", suffix=".not_jpeg") as f:
-            image_path = Path(f.name)
-            video_path = image_path
-            motion_path = Path("MV.jpeg")
+            self.image_path = Path(f.name)
             params = [
                 # fmt: off
-                "-i", str(image_path),
-                "-v", str(video_path),
-                "-m", str(motion_path),
+                "-i", str(self.image_path),
+                "-v", str(self.video_path),
+                "-m", str(self.motion_path),
                 # fmt: on
             ]
-            self.assertFalse(motion_path.exists())
-            self.assertLessEqual(
-                video_path.stat().st_size, TestValidateVideoFile.MAX_SIZE
-            )
 
             # test
             res = runner.invoke(cli_file, params)
@@ -282,7 +287,53 @@ class TestCliFile(TestCase):
 
     @patch("motionphoto.create_motion_photo")
     def test_unreadable_image(self, mock_create_mp: MagicMock) -> None:
-        pass
+
+        # setup
+        runner = CliRunner()
+        self.image_path.chmod(0o200)
+        self.assertFalse(os.access(self.image_path, os.R_OK))
+        params = [
+            # fmt: off
+            "-i", str(self.image_path),
+            "-v", str(self.video_path),
+            "-m", str(self.motion_path),
+            # fmt: on
+        ]
+
+        # test
+        res = runner.invoke(cli_file, params)
+
+        # check
+        self.assertNotEqual(res.exit_code, 0)
+        self.assertTrue("-i" in res.output)
+        for p in ["-v", "-m"]:
+            self.assertFalse(p in res.output)
+        mock_create_mp.assert_not_called()
+
+    @patch("motionphoto.create_motion_photo")
+    def test_non_existent_image(self, mock_create_mp: MagicMock) -> None:
+
+        # setup
+        runner = CliRunner()
+        self.image_path = Path("non_existent.jpeg")
+        self.assertFalse(self.image_path.exists())
+        params = [
+            # fmt: off
+            "-i", str(self.image_path),
+            "-v", str(self.video_path),
+            "-m", str(self.motion_path),
+            # fmt: on
+        ]
+
+        # test
+        res = runner.invoke(cli_file, params)
+
+        # check
+        self.assertNotEqual(res.exit_code, 0)
+        self.assertTrue("-i" in res.output)
+        for p in ["-v", "-m"]:
+            self.assertFalse(p in res.output)
+        mock_create_mp.assert_not_called()
 
     @patch("motionphoto.create_motion_photo")
     @patch("pathlib.Path.stat")  # brittle test, but easier than making 2GB file
@@ -293,25 +344,20 @@ class TestCliFile(TestCase):
         # setup
         runner = CliRunner()
         mock_stat.return_value.st_size = TestValidateVideoFile.MAX_SIZE + 1
-        with NamedTemporaryFile("r", suffix=".jpeg") as f:
-            image_path = Path(f.name)
-            video_path = image_path
-            motion_path = Path("MV.jpeg")
-            params = [
-                # fmt: off
-                "-i", str(image_path),
-                "-v", str(video_path),
-                "-m", str(motion_path),
-                # fmt: on
-            ]
-            self.assertFalse(os.path.exists(motion_path))  # can't use Path
-            self.assertGreaterEqual(
-                video_path.stat().st_size, TestValidateVideoFile.MAX_SIZE
-            )
-            mock_stat.reset_mock()
+        params = [
+            # fmt: off
+            "-i", str(self.image_path),
+            "-v", str(self.video_path),
+            "-m", str(self.motion_path),
+            # fmt: on
+        ]
+        self.assertGreater(
+            self.video_path.stat().st_size, TestValidateVideoFile.MAX_SIZE
+        )
+        mock_stat.reset_mock()
 
-            # test
-            res = runner.invoke(cli_file, params)
+        # test
+        res = runner.invoke(cli_file, params)
 
         # check
         self.assertNotEqual(res.exit_code, 0)
@@ -323,142 +369,201 @@ class TestCliFile(TestCase):
 
     @patch("motionphoto.create_motion_photo")
     def test_unreadable_video(self, mock_create_mp: MagicMock) -> None:
-        pass
+
+        # setup
+        runner = CliRunner()
+        self.video_path.chmod(0o200)
+        self.assertFalse(os.access(self.video_path, os.R_OK))
+        params = [
+            # fmt: off
+            "-i", str(self.image_path),
+            "-v", str(self.video_path),
+            "-m", str(self.motion_path),
+            # fmt: on
+        ]
+
+        # test
+        res = runner.invoke(cli_file, params)
+
+        # check
+        self.assertNotEqual(res.exit_code, 0)
+        self.assertTrue("-v" in res.output)
+        for p in ["-i", "-m"]:
+            self.assertFalse(p in res.output)
+        mock_create_mp.assert_not_called()
+
+    @patch("motionphoto.create_motion_photo")
+    def test_non_existent_video(self, mock_create_mp: MagicMock) -> None:
+
+        # setup
+        runner = CliRunner()
+        self.video_path = Path("non_existent.mov")
+        self.assertFalse(self.video_path.exists())
+        params = [
+            # fmt: off
+            "-i", str(self.image_path),
+            "-v", str(self.video_path),
+            "-m", str(self.motion_path),
+            # fmt: on
+        ]
+
+        # test
+        res = runner.invoke(cli_file, params)
+
+        # check
+        self.assertNotEqual(res.exit_code, 0)
+        self.assertTrue("-v" in res.output)
+        for p in ["-i", "-m"]:
+            self.assertFalse(p in res.output)
+        mock_create_mp.assert_not_called()
 
     @patch("motionphoto.create_motion_photo")
     def test_bad_motion_name(self, mock_create_mp: MagicMock) -> None:
 
         # setup
         runner = CliRunner()
-        with NamedTemporaryFile("r", suffix=".jpeg") as f:
-            image_path = Path(f.name)
-            video_path = image_path
-            motion_path = Path("bad.jpeg")
-            params = [
-                # fmt: off
-                "-i", str(image_path),
-                "-v", str(video_path),
-                "-m", str(motion_path),
-                # fmt: on
-            ]
-            self.assertFalse(motion_path.exists())
-            self.assertLessEqual(
-                video_path.stat().st_size, TestValidateVideoFile.MAX_SIZE
-            )
+        self.motion_path = Path("not_MV.jpeg")
+        params = [
+            # fmt: off
+            "-i", str(self.image_path),
+            "-v", str(self.video_path),
+            "-m", str(self.motion_path),
+            # fmt: on
+        ]
+        self.assertFalse(self.motion_path.exists())
 
-            # test
-            res = runner.invoke(cli_file, params)
+        # test
+        res = runner.invoke(cli_file, params)
 
-            # check
-            self.assertNotEqual(res.exit_code, 0)
-            self.assertTrue("-m" in res.output)
-            for p in ["-i", "-v"]:
-                self.assertFalse(p in res.output)
-            mock_create_mp.assert_not_called()
+        # check
+        self.assertNotEqual(res.exit_code, 0)
+        self.assertTrue("-m" in res.output)
+        for p in ["-i", "-v"]:
+            self.assertFalse(p in res.output)
+        mock_create_mp.assert_not_called()
 
     @patch("motionphoto.create_motion_photo")
-    def test_unreadable_unwritable_motion(
-        self, mock_create_mp: MagicMock
-    ) -> None:
-        pass
+    def test_readonly_writeonly_motion(self, mock_create_mp: MagicMock) -> None:
+
+        # setup
+        runner = CliRunner()
+        with NamedTemporaryFile("r", prefix="MV") as f:
+            perms = [
+                (0o200, os.R_OK),  # write-only, read check
+                (0o400, os.W_OK),  # read-only, write check
+            ]
+            for perm in perms:
+                self.motion_path = Path(f.name)
+                self.motion_path.chmod(perm[0])
+                self.assertFalse(os.access(self.motion_path, perm[1]))
+                params = [
+                    # fmt: off
+                    "-i", str(self.image_path),
+                    "-v", str(self.video_path),
+                    "-m", str(self.motion_path),
+                    "--overwrite",
+                    # fmt: on
+                ]
+
+                # test
+                res = runner.invoke(cli_file, params)
+
+                # check
+                self.assertNotEqual(res.exit_code, 0)
+                self.assertTrue("-m" in res.output)
+                for p in ["-i", "-v"]:
+                    self.assertFalse(p in res.output)
+                mock_create_mp.assert_not_called()
 
     @patch("motionphoto.create_motion_photo")
     def test_bad_timestamp(self, mock_create_mp: MagicMock) -> None:
 
         # setup
         runner = CliRunner()
-        with NamedTemporaryFile("r", suffix=".jpeg") as f:
-            image_path = Path(f.name)
-            video_path = image_path
-            motion_path = Path("MV.jpeg")
-            timestamp_us = -1
-            params = [
-                # fmt: off
-                "-i", str(image_path),
-                "-v", str(video_path),
-                "-m", str(motion_path),
-                "-t_us", timestamp_us,
-                # fmt: on
-            ]
-            self.assertFalse(motion_path.exists())
-            self.assertLessEqual(
-                video_path.stat().st_size, TestValidateVideoFile.MAX_SIZE
-            )
-            self.assertLess(timestamp_us, 0)
+        timestamp_us = -1
+        params = [
+            # fmt: off
+            "-i", str(self.image_path),
+            "-v", str(self.video_path),
+            "-m", str(self.motion_path),
+            "-t_us", timestamp_us,
+            # fmt: on
+        ]
+        self.assertLess(timestamp_us, 0)
 
-            # test
-            res = runner.invoke(cli_file, params)
+        # test
+        res = runner.invoke(cli_file, params)
 
-            # check
-            self.assertNotEqual(res.exit_code, 0)
-            self.assertTrue("-t_us" in res.output)
-            for p in ["-i", "-v", "-m"]:
-                self.assertFalse(p in res.output)
-            mock_create_mp.assert_not_called()
+        # check
+        self.assertNotEqual(res.exit_code, 0)
+        self.assertTrue("-t_us" in res.output)
+        for p in ["-i", "-v", "-m"]:
+            self.assertFalse(p in res.output)
+        mock_create_mp.assert_not_called()
+
+    @patch("motionphoto.create_motion_photo")
+    def test_both_bool_option_overwrite_last(
+        self, mock_create_mp: MagicMock
+    ) -> None:
+        pass
+
+    @patch("motionphot.create_motion_photo")
+    def test_both_bool_option_no_overwrite_last(
+        self, mock_create_mp: MagicMock
+    ) -> None:
+        pass
+
+    @patch("motionphoto.create_motion_photo")
+    def test_duplicate_option(self, mock_create_mp: MagicMock) -> None:
+        pass
 
     @patch("motionphoto.create_motion_photo")
     def test_unknown_option(self, mock_create_mp: MagicMock) -> None:
 
         # setup
         runner = CliRunner()
-        with NamedTemporaryFile("r", suffix=".not_jpeg") as f:
-            image_path = Path(f.name)
-            video_path = image_path
-            motion_path = Path("MV.jpeg")
-            params = [
-                # fmt: off
-                "-i", str(image_path),
-                "-v", str(video_path),
-                "-m", str(motion_path),
-                "-unknown_option"
-                # fmt: on
-            ]
-            self.assertFalse(motion_path.exists())
-            self.assertLessEqual(
-                video_path.stat().st_size, TestValidateVideoFile.MAX_SIZE
-            )
+        params = [
+            # fmt: off
+            "-i", str(self.image_path),
+            "-v", str(self.video_path),
+            "-m", str(self.motion_path),
+            "-unknown_option"
+            # fmt: on
+        ]
 
-            # test
-            res = runner.invoke(cli_file, params)
+        # test
+        res = runner.invoke(cli_file, params)
 
-            # check
-            self.assertNotEqual(res.exit_code, 0)
-            self.assertTrue(params[-1] in res.output)
-            for p in ["-i", "-v", "-m"]:
-                self.assertTrue(p not in res.output)
-            mock_create_mp.assert_not_called()
+        # check
+        self.assertNotEqual(res.exit_code, 0)
+        self.assertTrue(params[-1] in res.output)
+        for p in ["-i", "-v", "-m"]:
+            self.assertTrue(p not in res.output)
+        mock_create_mp.assert_not_called()
 
     @patch("motionphoto.create_motion_photo")
     def test_unknown_argument(self, mock_create_mp: MagicMock) -> None:
 
         # setup
         runner = CliRunner()
-        with NamedTemporaryFile("r", suffix=".not_jpeg") as f:
-            image_path = Path(f.name)
-            video_path = image_path
-            motion_path = Path("MV.jpeg")
-            params = [
-                # fmt: off
-                "-i", str(image_path),
-                "-v", str(video_path),
-                "-m", str(motion_path),
-                "unknown_argument"
-                # fmt: on
-            ]
-            self.assertFalse(motion_path.exists())
-            self.assertLessEqual(
-                video_path.stat().st_size, TestValidateVideoFile.MAX_SIZE
-            )
+        params = [
+            # fmt: off
+            "-i", str(self.image_path),
+            "-v", str(self.video_path),
+            "-m", str(self.motion_path),
+            "unknown_argument"
+            # fmt: on
+        ]
 
-            # test
-            res = runner.invoke(cli_file, params)
+        # test
+        res = runner.invoke(cli_file, params)
 
-            # check
-            self.assertNotEqual(res.exit_code, 0)
-            self.assertTrue(params[-1] in res.output)
-            for p in ["-i", "-v", "-m"]:
-                self.assertTrue(p not in res.output)
-            mock_create_mp.assert_not_called()
+        # check
+        self.assertNotEqual(res.exit_code, 0)
+        self.assertTrue(params[-1] in res.output)
+        for p in ["-i", "-v", "-m"]:
+            self.assertTrue(p not in res.output)
+        mock_create_mp.assert_not_called()
 
     @patch("motionphoto.create_motion_photo")
     def test_good_params(self, mock_create_mp: MagicMock) -> None:
