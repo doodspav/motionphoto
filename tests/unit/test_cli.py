@@ -1,5 +1,4 @@
 import os
-import traceback
 
 from copy import deepcopy
 from pathlib import Path
@@ -9,6 +8,8 @@ from unittest.mock import MagicMock, patch
 
 from click import Context, Option, BadParameter
 from click.testing import CliRunner
+
+import motionphoto
 
 from motionphoto.cli import (
     cli_file,
@@ -210,7 +211,7 @@ class TestCliFile(TestCase):
             if p.exists():
                 os.remove(p)
 
-    @patch("motionphoto.create_motion_photo")
+    @patch("motionphoto.cli.create_motion_photo")
     def test_missing_parameter_option(self, mock_create_mp: MagicMock) -> None:
 
         # setup
@@ -232,12 +233,12 @@ class TestCliFile(TestCase):
             self.assertNotEqual(res.exit_code, 0)
             for pp in param_pairs:
                 if pp[0] == param_pairs[i][0]:
-                    self.assertTrue(pp[0] in res.output)
+                    self.assertIn(pp[0], res.output)
                 else:
-                    self.assertFalse(pp[0] in res.output)
+                    self.assertNotIn(pp[0], res.output)
             mock_create_mp.assert_not_called()
 
-    @patch("motionphoto.create_motion_photo")
+    @patch("motionphoto.cli.create_motion_photo")
     def test_missing_parameter_value(self, mock_create_mp: MagicMock) -> None:
 
         # setup
@@ -259,12 +260,12 @@ class TestCliFile(TestCase):
             self.assertNotEqual(res.exit_code, 0)
             for pp in param_pairs:
                 if pp[0] == param_pairs[i][0]:
-                    self.assertTrue(pp[0] in res.output)
+                    self.assertIn(pp[0], res.output)
                 else:
-                    self.assertFalse(pp[0] in res.output)
+                    self.assertNotIn(pp[0], res.output)
             mock_create_mp.assert_not_called()
 
-    @patch("motionphoto.create_motion_photo")
+    @patch("motionphoto.cli.create_motion_photo")
     def test_bad_image_format(self, mock_create_mp: MagicMock) -> None:
 
         # setup
@@ -284,12 +285,12 @@ class TestCliFile(TestCase):
 
             # check
             self.assertNotEqual(res.exit_code, 0)
-            self.assertTrue("-i" in res.output)
+            self.assertIn("-i", res.output)
             for p in ["-v", "-m"]:
-                self.assertFalse(p in res.output)
+                self.assertNotIn(p, res.output)
             mock_create_mp.assert_not_called()
 
-    @patch("motionphoto.create_motion_photo")
+    @patch("motionphoto.cli.create_motion_photo")
     def test_unreadable_image(self, mock_create_mp: MagicMock) -> None:
 
         # setup
@@ -309,12 +310,12 @@ class TestCliFile(TestCase):
 
         # check
         self.assertNotEqual(res.exit_code, 0)
-        self.assertTrue("-i" in res.output)
+        self.assertIn("-i", res.output)
         for p in ["-v", "-m"]:
-            self.assertFalse(p in res.output)
+            self.assertNotIn(p, res.output)
         mock_create_mp.assert_not_called()
 
-    @patch("motionphoto.create_motion_photo")
+    @patch("motionphoto.cli.create_motion_photo")
     def test_non_existent_image(self, mock_create_mp: MagicMock) -> None:
 
         # setup
@@ -334,12 +335,12 @@ class TestCliFile(TestCase):
 
         # check
         self.assertNotEqual(res.exit_code, 0)
-        self.assertTrue("-i" in res.output)
+        self.assertIn("-i", res.output)
         for p in ["-v", "-m"]:
-            self.assertFalse(p in res.output)
+            self.assertNotIn(p, res.output)
         mock_create_mp.assert_not_called()
 
-    @patch("motionphoto.create_motion_photo")
+    @patch("motionphoto.cli.create_motion_photo")
     @patch("pathlib.Path.stat")  # brittle test, but easier than making 2GB file
     def test_bad_video_size(
         self, mock_stat: MagicMock, mock_create_mp: MagicMock
@@ -365,13 +366,13 @@ class TestCliFile(TestCase):
 
         # check
         self.assertNotEqual(res.exit_code, 0)
-        self.assertTrue("-v" in res.output)
+        self.assertIn("-v", res.output)
         for p in ["-i", "-m"]:
-            self.assertFalse(p in res.output)
+            self.assertNotIn(p, res.output)
         mock_create_mp.assert_not_called()
         mock_stat.assert_called_once()
 
-    @patch("motionphoto.create_motion_photo")
+    @patch("motionphoto.cli.create_motion_photo")
     def test_unreadable_video(self, mock_create_mp: MagicMock) -> None:
 
         # setup
@@ -391,12 +392,12 @@ class TestCliFile(TestCase):
 
         # check
         self.assertNotEqual(res.exit_code, 0)
-        self.assertTrue("-v" in res.output)
+        self.assertIn("-v", res.output)
         for p in ["-i", "-m"]:
-            self.assertFalse(p in res.output)
+            self.assertNotIn(p, res.output)
         mock_create_mp.assert_not_called()
 
-    @patch("motionphoto.create_motion_photo")
+    @patch("motionphoto.cli.create_motion_photo")
     def test_non_existent_video(self, mock_create_mp: MagicMock) -> None:
 
         # setup
@@ -416,12 +417,12 @@ class TestCliFile(TestCase):
 
         # check
         self.assertNotEqual(res.exit_code, 0)
-        self.assertTrue("-v" in res.output)
+        self.assertIn("-v", res.output)
         for p in ["-i", "-m"]:
-            self.assertFalse(p in res.output)
+            self.assertNotIn(p, res.output)
         mock_create_mp.assert_not_called()
 
-    @patch("motionphoto.create_motion_photo")
+    @patch("motionphoto.cli.create_motion_photo")
     def test_bad_motion_name(self, mock_create_mp: MagicMock) -> None:
 
         # setup
@@ -441,12 +442,12 @@ class TestCliFile(TestCase):
 
         # check
         self.assertNotEqual(res.exit_code, 0)
-        self.assertTrue("-m" in res.output)
+        self.assertIn("-m", res.output)
         for p in ["-i", "-v"]:
-            self.assertFalse(p in res.output)
+            self.assertNotIn(p, res.output)
         mock_create_mp.assert_not_called()
 
-    @patch("motionphoto.create_motion_photo")
+    @patch("motionphoto.cli.create_motion_photo")
     def test_readonly_writeonly_motion(self, mock_create_mp: MagicMock) -> None:
 
         # setup
@@ -474,12 +475,12 @@ class TestCliFile(TestCase):
 
                 # check
                 self.assertNotEqual(res.exit_code, 0)
-                self.assertTrue("-m" in res.output)
+                self.assertIn("-m", res.output)
                 for p in ["-i", "-v"]:
-                    self.assertFalse(p in res.output)
+                    self.assertNotIn(p, res.output)
                 mock_create_mp.assert_not_called()
 
-    @patch("motionphoto.create_motion_photo")
+    @patch("motionphoto.cli.create_motion_photo")
     def test_bad_timestamp(self, mock_create_mp: MagicMock) -> None:
 
         # setup
@@ -500,28 +501,103 @@ class TestCliFile(TestCase):
 
         # check
         self.assertNotEqual(res.exit_code, 0)
-        self.assertTrue("-t_us" in res.output)
+        self.assertIn("-t_us", res.output)
         for p in ["-i", "-v", "-m"]:
-            self.assertFalse(p in res.output)
+            self.assertNotIn(p, res.output)
         mock_create_mp.assert_not_called()
 
-    @patch("motionphoto.create_motion_photo")
+    @patch("motionphoto.cli.create_motion_photo")
     def test_both_bool_option_overwrite_last(
         self, mock_create_mp: MagicMock
     ) -> None:
-        pass
 
-    @patch("motionphoto.create_motion_photo")
+        # setup
+        runner = CliRunner()
+        params = [
+            # fmt: off
+            "-i", str(self.image_path),
+            "-v", str(self.video_path),
+            "-m", str(self.motion_path),
+            "--no-overwrite",
+            "--overwrite",
+            # fmt: on
+        ]
+
+        # test
+        res = runner.invoke(cli_file, params)
+
+        # check
+        self.assertEqual(res.exit_code, 0)
+        mock_create_mp.assert_called_once_with(
+            image=self.image_path,
+            video=self.video_path,
+            motion=self.motion_path,
+            timestamp_us=None,
+            overwrite=True,
+        )
+
+    @patch("motionphoto.cli.create_motion_photo")
     def test_both_bool_option_no_overwrite_last(
         self, mock_create_mp: MagicMock
     ) -> None:
-        pass
 
-    @patch("motionphoto.create_motion_photo")
+        # setup
+        runner = CliRunner()
+        params = [
+            # fmt: off
+            "-i", str(self.image_path),
+            "-v", str(self.video_path),
+            "-m", str(self.motion_path),
+            "--overwrite",
+            "--no-overwrite",
+            # fmt: on
+        ]
+
+        # test
+        res = runner.invoke(cli_file, params)
+
+        # check
+        self.assertEqual(res.exit_code, 0)
+        mock_create_mp.assert_called_once_with(
+            image=self.image_path,
+            video=self.video_path,
+            motion=self.motion_path,
+            timestamp_us=None,
+            overwrite=False,
+        )
+
+    @patch("motionphoto.cli.create_motion_photo")
     def test_duplicate_option(self, mock_create_mp: MagicMock) -> None:
-        pass
 
-    @patch("motionphoto.create_motion_photo")
+        # setup
+        runner = CliRunner()
+        params = [
+            # fmt: off
+            "-i", "bad.txt",
+            "-i", str(self.image_path),
+            "-v", "bad.mov",
+            "-v", str(self.video_path),
+            "-m", "bad.jpeg",
+            "-m", str(self.motion_path),
+            "-t_us", -1,
+            "-t_us", 1234,
+            # fmt: on
+        ]
+
+        # test
+        res = runner.invoke(cli_file, params)
+
+        # check
+        self.assertEqual(res.exit_code, 0)
+        mock_create_mp.assert_called_once_with(
+            image=self.image_path,
+            video=self.video_path,
+            motion=self.motion_path,
+            timestamp_us=1234,
+            overwrite=False,
+        )
+
+    @patch("motionphoto.cli.create_motion_photo")
     def test_unknown_option(self, mock_create_mp: MagicMock) -> None:
 
         # setup
@@ -540,12 +616,12 @@ class TestCliFile(TestCase):
 
         # check
         self.assertNotEqual(res.exit_code, 0)
-        self.assertTrue(params[-1] in res.output)
+        self.assertIn(params[-1], res.output)
         for p in ["-i", "-v", "-m"]:
-            self.assertTrue(p not in res.output)
+            self.assertNotIn(p, res.output)
         mock_create_mp.assert_not_called()
 
-    @patch("motionphoto.create_motion_photo")
+    @patch("motionphoto.cli.create_motion_photo")
     def test_unknown_argument(self, mock_create_mp: MagicMock) -> None:
 
         # setup
@@ -564,27 +640,82 @@ class TestCliFile(TestCase):
 
         # check
         self.assertNotEqual(res.exit_code, 0)
-        self.assertTrue(params[-1] in res.output)
+        self.assertIn(params[-1], res.output)
         for p in ["-i", "-v", "-m"]:
-            self.assertTrue(p not in res.output)
+            self.assertNotIn(p, res.output)
         mock_create_mp.assert_not_called()
 
-    @patch("motionphoto.create_motion_photo")
+    @patch("motionphoto.cli.create_motion_photo")
     def test_good_params(self, mock_create_mp: MagicMock) -> None:
         pass
 
-    @patch("motionphoto.create_motion_photo")
+    @patch("motionphoto.cli.create_motion_photo")
     def test_raise_file_exists_error(self, mock_create_mp: MagicMock) -> None:
-        pass
 
-    @patch("motionphoto.create_motion_photo")
+        # setup
+        runner = CliRunner()
+        params = [
+            # fmt: off
+            "-i", str(self.image_path),
+            "-v", str(self.video_path),
+            "-m", str(self.motion_path),
+            # fmt: on
+        ]
+        mock_create_mp.side_effect = lambda *args, **kwargs: (
+            _ for _ in ()
+        ).throw(FileExistsError())
+
+        # test
+        res = runner.invoke(cli_file, params)
+
+        # check
+        self.assertNotEqual(res.exit_code, 0)
+        self.assertIn("--overwrite", res.output)  # should contain tip
+        mock_create_mp.assert_called_once_with(
+            image=self.image_path,
+            video=self.video_path,
+            motion=self.motion_path,
+            timestamp_us=None,
+            overwrite=False,
+        )
+
+    @patch("motionphoto.cli.create_motion_photo")
     def test_raise_exception(self, mock_create_mp: MagicMock) -> None:
         pass
 
-    @patch("motionphoto.create_motion_photo")
+    @patch("motionphoto.cli.create_motion_photo")
     def test_version(self, mock_create_mp: MagicMock) -> None:
-        pass
 
-    @patch("motionphoto.create_motion_photo")
+        # setup
+        runner = CliRunner()
+        params = ["--version"]
+
+        # test
+        res = runner.invoke(cli_file, params)
+
+        # check
+        self.assertEqual(res.exit_code, 0)
+        self.assertIn(motionphoto.__version__, res.output)
+
+    @patch("motionphoto.cli.create_motion_photo")
     def test_help(self, mock_create_mp: MagicMock) -> None:
-        pass
+
+        # setup
+        runner = CliRunner()
+        params = ["--help"]
+
+        # test
+        res = runner.invoke(cli_file, params)
+
+        # check
+        options = [
+            "-i, --image",
+            "-v, --video",
+            "-m, --motion",
+            "-t_us, --timestamp_us",
+            "--overwrite / --no-overwrite",
+            "--version",
+            "--help",
+        ]
+        for option in options:
+            self.assertIn(option, res.output)

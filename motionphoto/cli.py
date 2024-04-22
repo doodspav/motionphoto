@@ -167,9 +167,10 @@ def cli_file(
 
     # specifically catch this error to provide helpful tip about --overwrite
     except FileExistsError:
-        print(
+        click.echo(
             f"Error: Output motion photo file already exists: {motion} "
-            "(try using --overwrite)"
+            "(try using --overwrite)",
+            err=True,
         )
         sys.exit(1)
 
