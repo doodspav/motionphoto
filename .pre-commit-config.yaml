@@ -61,6 +61,7 @@ repos:
         entry: venv/bin/python
         args: [-m, coverage, run, --branch, -m, unittest, discover, -s, tests/unit]
         pass_filenames: false
+        always_run: true
 
   - repo: local
     hooks:
@@ -69,5 +70,6 @@ repos:
         language: script
         types: [python]
         entry: venv/bin/python
-        args: [-m, coverage, report, --fail-under=40]
+        args: [-m, coverage, report, --fail-under=100]
         pass_filenames: false
+        always_run: true
