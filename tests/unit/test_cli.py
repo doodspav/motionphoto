@@ -647,7 +647,31 @@ class TestCliFile(TestCase):
 
     @patch("motionphoto.cli.create_motion_photo")
     def test_good_params(self, mock_create_mp: MagicMock) -> None:
-        pass
+
+        # setup
+        runner = CliRunner()
+        good_params = [
+            # fmt: off
+            "--image", str(self.image_path),
+            "--video", str(self.video_path),
+            "--motion", str(self.motion_path),
+            "--timestamp_us", 0,
+            "--no-overwrite"
+            # fmt: on
+        ]
+
+        # test
+        res = runner.invoke(cli_file, good_params)
+
+        # check
+        self.assertEqual(res.exit_code, 0)
+        mock_create_mp.assert_called_once_with(
+            image=self.image_path,
+            video=self.video_path,
+            motion=self.motion_path,
+            timestamp_us=0,
+            overwrite=False,
+        )
 
     @patch("motionphoto.cli.create_motion_photo")
     def test_raise_file_exists_error(self, mock_create_mp: MagicMock) -> None:
@@ -681,7 +705,32 @@ class TestCliFile(TestCase):
 
     @patch("motionphoto.cli.create_motion_photo")
     def test_raise_exception(self, mock_create_mp: MagicMock) -> None:
-        pass
+
+        # setup
+        runner = CliRunner()
+        params = [
+            # fmt: off
+            "-i", str(self.image_path),
+            "-v", str(self.video_path),
+            "-m", str(self.motion_path),
+            # fmt: on
+        ]
+        mock_create_mp.side_effect = lambda *args, **kwargs: (
+            _ for _ in ()
+        ).throw(Exception())
+
+        # test
+        res = runner.invoke(cli_file, params)
+
+        # check
+        self.assertNotEqual(res.exit_code, 0)
+        mock_create_mp.assert_called_once_with(
+            image=self.image_path,
+            video=self.video_path,
+            motion=self.motion_path,
+            timestamp_us=None,
+            overwrite=False,
+        )
 
     @patch("motionphoto.cli.create_motion_photo")
     def test_version(self, mock_create_mp: MagicMock) -> None:
