@@ -26,9 +26,9 @@ class TestWriteMetadataTags(TestCase):
                 # test
                 write_metadata_tags(media=media, tags=tags)
 
-                # check
-                mock_run.assert_called_once()
-                mock_run.reset_mock()
+            # check
+            mock_run.assert_called_once()
+            mock_run.reset_mock()
 
     @patch("subprocess.run")
     def test_no_tags_skipped(self, mock_run: MagicMock) -> None:

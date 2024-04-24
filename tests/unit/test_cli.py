@@ -208,8 +208,8 @@ class TestCliFile(TestCase):
         os.remove(self._image_path_to_delete)
         os.remove(self._video_path_to_delete)
         for p in [self.image_path, self.video_path, self.motion_path]:
-            if p.exists():
-                os.remove(p)
+            if p.exists():  # pragma: no cover
+                os.remove(p)  # pragma: no cover
 
     @patch("motionphoto.cli.create_motion_photo")
     def test_missing_parameter_option(self, mock_create_mp: MagicMock) -> None:
