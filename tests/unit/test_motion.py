@@ -18,7 +18,7 @@ class TestCreateMotionPhoto(TestCase):
 
     def test_motion_bad_name(self) -> None:
         pass
-    
+
     def test_motion_parent_dir_missing(self) -> None:
         pass
 
