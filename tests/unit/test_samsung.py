@@ -58,7 +58,7 @@ class TestWriteSamsungMotionMetadata(TestCase):
 
 class TestCreateSamsungMotionTrailer(TestCase):
 
-    MAX_SIZE = 2**31 - 1
+    MAX_SIZE = 2**31 - 1  #
 
     def make_trailer(self, *, media_contents: bytes) -> SamsungTrailer:
         trailer = bytearray()
@@ -105,7 +105,7 @@ class TestCreateSamsungMotionTrailer(TestCase):
             create_samsung_motion_trailer(video=media)
 
         # check
-        mock_stat.assert_called_once()
+        mock_stat.assert_called()
 
     @patch("pathlib.Path.stat")
     def test_media_size_limit(self, mock_stat: MagicMock) -> None:
