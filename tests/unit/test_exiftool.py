@@ -36,7 +36,8 @@ class TestWriteMetadataTags(TestCase):
         # setup
         media = Path("media")
         tags = []
-        mock_run.return_value = CompletedProcess(args=[], returncode=0)
+        exit_code = -1  # would normally raise an exception
+        mock_run.return_value = CompletedProcess(args=[], returncode=exit_code)
 
         # test
         write_metadata_tags(media=media, tags=tags)
@@ -50,10 +51,10 @@ class TestWriteMetadataTags(TestCase):
         # setup
         media = Path("media")
         tags = ["test"]
-        mock_run.return_value = CompletedProcess(args=[], returncode=0)
+        exit_code = 0
+        mock_run.return_value = CompletedProcess(args=[], returncode=exit_code)
 
         # test
-
         write_metadata_tags(media=media, tags=tags)
 
         # check
