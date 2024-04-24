@@ -8,9 +8,6 @@ from unittest.mock import MagicMock, patch
 
 from motionphoto.motion import (
     create_motion_photo,
-    create_samsung_motion_trailer,
-    write_google_motion_metadata,
-    write_samsung_motion_metadata,
     SamsungTrailer,
 )
 
