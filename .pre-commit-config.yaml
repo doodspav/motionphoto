@@ -59,7 +59,7 @@ repos:
         language: script
         types: [python]
         entry: venv/bin/python
-        args: [-m, coverage, run, --include, motionphoto/*, --branch, -m, unittest, discover, -s, tests/unit]
+        args: [-m, coverage, run, --include, motionphoto/*, tests/*, --branch, -m, unittest, discover, -s, tests/unit]
         pass_filenames: false
 
   - repo: local

@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List, Optional
+from typing import List
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
