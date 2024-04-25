@@ -16,8 +16,8 @@ class TestMotionPhotoExecutable(TestCase):
 
         # updated environment variables with PYTHONPATH giving our module
         environ = dict(os.environ)
-        if "PYTHONPATH" not in environ:
-            environ["PYTHONPATH"] = ""
+        if "PYTHONPATH" not in environ:  # pragma: no cover
+            environ["PYTHONPATH"] = ""  # pragma: no cover
         mod_path = Path(__file__).parent.parent.parent
         environ["PYTHONPATH"] = f"{mod_path}{os.pathsep}{environ['PYTHONPATH']}"
         return environ

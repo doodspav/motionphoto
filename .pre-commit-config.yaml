@@ -59,7 +59,7 @@ repos:
         language: script
         types: [python]
         entry: venv/bin/python
-        args: [-m, coverage, run, --data-file=.coverage.integration --omit="motionphoto/*", --branch, -m, unittest, discover, -s, tests/integration]
+        args: [-m, coverage, run, --data-file=.coverage.integration, --omit="motionphoto/*", --branch, -m, unittest, discover, -s, tests/integration]
         pass_filenames: false
         always_run: true
 
@@ -82,6 +82,8 @@ repos:
         types: [python]
         entry: venv/bin/python
         args: [-m, coverage, combine]
+        pass_filenames: false
+        always_run: true
 
 
   - repo: local
