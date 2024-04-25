@@ -1,4 +1,5 @@
 import json
+import struct
 import subprocess
 
 from pathlib import Path
@@ -6,7 +7,7 @@ from typing import Optional
 from unittest import TestCase
 
 
-def check_motion(
+def assert_motion(
     self: TestCase,
     *,
     motion_path: Path,
@@ -52,8 +53,10 @@ def check_motion(
         self.assertEqual(known_fields[k], output[k])
     self.assertIn("MicroVideoOffset", output)
     with open(motion_path, "rb") as f:
-        file_data = f.read()
-        negative_offset = len(file_data) - file_data.find(video_data)
+        file_data: bytes = f.read()
+        prefix = struct.pack("<I", 16) + b"MotionPhoto_Data"
+        offset = file_data.find(prefix) + len(prefix)
+        negative_offset = len(file_data) - offset
         self.assertEqual(negative_offset, output["MicroVideoOffset"])
     if timestamp_us is not None:
         self.assertIn("MotionPhotoPresentationTimestampUs", output)
