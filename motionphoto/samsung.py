@@ -79,6 +79,14 @@ def create_samsung_motion_trailer(*, video: Path) -> SamsungTrailer:
              trailer to the start of the embedded video file.
     """
 
+    # check that the video isn't too big
+    if video.stat().st_size > 2**31 - 1:
+        msg = (
+            "Video file is too big to embed in Samsung trailer; video size is "
+            f"{video.stat().st_size} bytes, max size is {2**31 - 1} bytes"
+        )
+        raise ValueError(msg)
+
     # build up trailer
     trailer = bytearray()
     tags: List[SamsungTag] = []

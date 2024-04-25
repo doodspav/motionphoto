@@ -38,15 +38,11 @@ def validate_image_file(
 
     :param _ctx: Library context.
     :param _param: Command-line option parameter.
-    :param value: Path parameter value.
-    :return: Validated path.
+    :param value: Parameter value.
+    :return: Validated parameter value.
 
-    :raise click.BadParameter: File named by path has JPEG format.
+    :raise click.BadParameter: File named by path is not JPEG.
     """
-
-    # constants
-    jpeg_mimes = ("image/jpeg", "image/jpg")  # second is non-standard
-    jpeg_exts = (".jpeg", ".jpg")
 
     # attempt to determine format
     guess = filetype.guess(value)
@@ -55,9 +51,7 @@ def validate_image_file(
     )
 
     # check that format is JPEG
-    if (
-        mime is None and value.suffix not in jpeg_exts
-    ) or mime not in jpeg_mimes:
+    if mime not in ("image/jpeg", "image/jpg"):  # second is non-standard
         raise click.BadParameter("Input image file format must be JPEG")
 
     # success
@@ -72,8 +66,8 @@ def validate_video_file(
 
     :param _ctx: Library context.
     :param _param: Command-line option parameter.
-    :param value: Path parameter value.
-    :return: Validated path.
+    :param value: Parameter value.
+    :return: Validated parameter value.
 
     :raise click.BadParameter: File named by path exceeds INT32_MAX bytes.
     """
@@ -97,8 +91,8 @@ def validate_motion_file(
 
     :param _ctx: Library context.
     :param _param: Command-line option parameter.
-    :param value: Path parameter value.
-    :return: Validated path.
+    :param value: Pameter value.
+    :return: Validated parameter value.
 
     :raise click.BadParameter: File name from path does not start with 'MV'.
     """
@@ -173,9 +167,10 @@ def cli_file(
 
     # specifically catch this error to provide helpful tip about --overwrite
     except FileExistsError:
-        print(
+        click.echo(
             f"Error: Output motion photo file already exists: {motion} "
-            "(try using --overwrite)"
+            "(try using --overwrite)",
+            err=True,
         )
         sys.exit(1)
 
