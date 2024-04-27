@@ -21,7 +21,7 @@ class SamsungTag:
 
     :ivar int offset: Negative offset from the start of the SEF section to the
                       start of the field in the trailer.
-    :ivar bytes marker: `SamsungMarker` value for the field.
+    :ivar bytes marker: ``SamsungMarker`` value for the field.
     """
 
     offset: int
