@@ -105,4 +105,3 @@ repos:
         entry: venv/bin/sphinx-build
         args: [-M, html, docs/source, docs/build, --fresh-env, --nitpicky, --silent, --fail-on-warning, --keep-going, --show-traceback]
         pass_filenames: false
-        always_run: true
