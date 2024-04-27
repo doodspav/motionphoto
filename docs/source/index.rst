@@ -6,15 +6,42 @@
 Welcome to motionphoto's documentation!
 =======================================
 
+TODO: introduction
+
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 1
+   :caption: Getting Started
 
+   getting_started/installation
+   getting_started/basic_usage
 
+.. toctree::
+   :maxdepth: 1
+   :caption: Idiots Guide
 
-Indices and tables
-==================
+   idiots_guide/install_python
+   idiots_guide/download_icloud_photos
+   idiots_guide/convert_photos
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. toctree::
+   :maxdepth: 1
+   :caption: Executable Interface
+
+   executable_interface/motionphoto
+   executable_interface/motionphotodir
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Python API
+
+   python_api/motion
+   python_api/google
+   python_api/samsung
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Binary Specification
+
+   binary_specification/general
+   binary_specification/google
+   binary_specification/samsung
