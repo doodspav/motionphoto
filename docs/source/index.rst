@@ -17,14 +17,6 @@ TODO: introduction
 
 .. toctree::
    :maxdepth: 1
-   :caption: Idiots Guide
-
-   idiots_guide/install_python
-   idiots_guide/download_icloud_photos
-   idiots_guide/convert_photos
-
-.. toctree::
-   :maxdepth: 1
    :caption: Executable Interface
 
    executable_interface/motionphoto
