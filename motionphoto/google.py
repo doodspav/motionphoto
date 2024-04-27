@@ -15,11 +15,11 @@ def write_google_motion_metadata(
     of Motion Photos.
 
     :param media: Existing media file path.
-    :param negative_video_offset: Byte offset from end of media file to start of
-                                  embedded video.
+    :param negative_video_offset: Byte offset from end of ``media`` file to the
+                                  start of the embedded video.
     :param timestamp_us: Optional key-frame time offset in microseconds.
 
-    :raise: RuntimeError: Calling 'exiftool' returned a non-zero exit code.
+    :raise: RuntimeError: Calling ``exiftool`` returned a non-zero exit code.
     """
 
     # set timestamp to Google's default if not present

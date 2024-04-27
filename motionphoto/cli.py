@@ -62,14 +62,14 @@ def validate_video_file(
     _ctx: click.Context, _param: click.Option, value: Path
 ) -> Path:
     """
-    Check that file named by path is not bigger than INT32_MAX bytes.
+    Check that file named by path is not bigger than ``INT32_MAX`` bytes.
 
     :param _ctx: Library context.
     :param _param: Command-line option parameter.
     :param value: Parameter value.
     :return: Validated parameter value.
 
-    :raise click.BadParameter: File named by path exceeds INT32_MAX bytes.
+    :raise click.BadParameter: File named by path exceeds ``INT32_MAX`` bytes.
     """
 
     # check that file size fits in signed 32bit integer
@@ -87,14 +87,14 @@ def validate_motion_file(
     _ctx: click.Context, _param: click.Option, value: Path
 ) -> Path:
     """
-    Check that file name from path starts with 'MV'.
+    Check that file name from path starts with ``'MV'``.
 
     :param _ctx: Library context.
     :param _param: Command-line option parameter.
-    :param value: Pameter value.
+    :param value: Parameter value.
     :return: Validated parameter value.
 
-    :raise click.BadParameter: File name from path does not start with 'MV'.
+    :raise click.BadParameter: File name from path does not start with ``'MV'``.
     """
 
     # check that file name starts with 'MV'
