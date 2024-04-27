@@ -85,7 +85,6 @@ repos:
         pass_filenames: false
         always_run: true
 
-
   - repo: local
     hooks:
       - id: coverage-report
@@ -94,5 +93,16 @@ repos:
         types: [python]
         entry: venv/bin/python
         args: [-m, coverage, report, --fail-under=100]
+        pass_filenames: false
+        always_run: true
+
+  - repo: local
+    hooks:
+      - id: build-docs
+        name: build-docs
+        language: script
+        types_or: [python, markdown, rst]
+        entry: venv/bin/sphinx-build
+        args: [-M, html, docs/source, docs/build, --fresh-env, --nitpicky, --silent, --fail-on-warning, --keep-going, --show-traceback]
         pass_filenames: false
         always_run: true
