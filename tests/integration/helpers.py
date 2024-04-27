@@ -59,7 +59,8 @@ def assert_motion(
     with open(motion_path, "rb") as f:
         file_data: bytes = f.read()
         prefix = struct.pack("<I", 16) + b"MotionPhoto_Data"
-        negative_offset = file_data.rfind(prefix) + len(prefix)
+        offset = file_data.rfind(prefix) + len(prefix)
+        negative_offset = len(file_data) - offset
         self.assertEqual(negative_offset, output["MicroVideoOffset"])
 
     # check timestamp

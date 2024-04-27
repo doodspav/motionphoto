@@ -7,7 +7,7 @@ from tempfile import TemporaryDirectory
 from typing import Dict, List, Optional
 from unittest import TestCase
 
-import helpers
+from . import helpers
 
 
 class TestMotionPhotoExecutable(TestCase):
