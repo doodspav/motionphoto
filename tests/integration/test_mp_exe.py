@@ -7,7 +7,7 @@ from tempfile import TemporaryDirectory
 from typing import Dict, List, Optional
 from unittest import TestCase
 
-from . import helpers
+from tests.integration import helpers
 
 
 class TestMotionPhotoExecutable(TestCase):
@@ -25,7 +25,7 @@ class TestMotionPhotoExecutable(TestCase):
     def get_image_paths(self) -> List[Path]:
 
         # build up paths
-        data_path = Path(__file__).parent.parent / "data"
+        data_path = Path(__file__).parent / "data"
         jpeg_suffixes = (".jpeg", ".jpg")
         image_paths = [
             p for p in data_path.iterdir() if p.suffix.lower() in jpeg_suffixes
