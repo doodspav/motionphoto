@@ -18,7 +18,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 - Initial python interface (`motionphoto` package):
 
-  - module `.`: 
+  - modules `.` and `.motion`: 
     - `create_motion_photo(...)`
   - module `.samsung`: 
     - `SamsungMarker`
