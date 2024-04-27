@@ -45,3 +45,9 @@ TODO: introduction
    binary_specification/general
    binary_specification/google
    binary_specification/samsung
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Notes
+
+   notes/changelog
