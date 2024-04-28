@@ -6,7 +6,14 @@
 Welcome to motionphoto's documentation!
 =======================================
 
-TODO: introduction
+This package contains a Python library and helper executables to convert image-video pairs into Motion Photos
+viewable in Google Photos, Google Gallery, and Samsung Gallery, as well as other Android photo viewers.
+
+The key motivation for using this library is to convert iOS Live Photos into Android Motion Photos.
+
+.. warning::
+   If you are downloading Live Photos from iCloud to convert to Motion Photos, you must download them as
+   **Most Compatible** which will download the images as JPEG instead of HEIC.
 
 .. toctree::
    :maxdepth: 1
@@ -39,7 +46,7 @@ TODO: introduction
    binary_specification/samsung
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Notes
 
    notes/changelog
