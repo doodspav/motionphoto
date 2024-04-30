@@ -26,10 +26,11 @@ Photo in Python by running:
    import pathlib
 
    if __name__ == "__main__":
+
        motionphoto.create_motion_photo(
            image=pathlib.Path("IMG_1234.JPEG"),
-           video=pathlib.PATH("IMG_1234.MOV"),
-           motion=pathlib.PATH("MVIMG_1234.JPEG"),
+           video=pathlib.Path("IMG_1234.MOV"),
+           motion=pathlib.Path("MVIMG_1234.JPEG"),
        )
 
 Running either of these will create a Motion Photo named ``MVIMG_1234.JPEG``
