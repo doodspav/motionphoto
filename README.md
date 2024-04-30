@@ -23,4 +23,4 @@ $ python -m pip install motionphoto
 ## Documentation
 
 The full documentation, including a basic usage guide, can be found 
-[here](hmm).
+[here](https://motionphoto.readthedocs.io/).
