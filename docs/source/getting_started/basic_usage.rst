@@ -1,7 +1,7 @@
 Basic Usage
 ===========
 
-Starting out in a directory call ``test`` with an image and a video file
+Starting out in a directory called ``test`` with an image and a video file
 looking like this:
 
 .. code-block:: none
@@ -16,6 +16,12 @@ command line by running:
 .. code-block:: shell
 
    motionphoto --image IMG_1234.JPEG --video IMG_1234.MOV --motion MVIMG_1234.JPEG
+
+or:
+
+.. code-block:: shell
+
+   python -m motionphoto --image IMG_1234.JPEG --video IMG_1234.MOV --motion MVIMG_1234.JPEG
 
 Alternatively, you can combine the image and video files into a single Motion
 Photo in Python by running:

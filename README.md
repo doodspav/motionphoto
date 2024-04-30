@@ -7,8 +7,8 @@ with Android can experience.
 
 ## Installation
 
-The Python library and corresponding executables depend on a program called
-`exiftool` created by Phil Harvey.
+The Python package and executables depend on a program called `exiftool`
+created by Phil Harvey.
 
 Instructions for installing this program can be found
 [here](httsps://exiftool.org/install.html>), however it will likely be easier
