@@ -5,6 +5,4 @@ motionphoto
    :shell:
 
 .. note::
-   | The command ``python -m motionphoto`` may need to be ``python3 -m
-     motionphoto`` depending on your installation.
-   | You can also call the ``motionphoto`` executable directly.
+   You can also call the ``motionphoto`` executable directly.
