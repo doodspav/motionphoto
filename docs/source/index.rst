@@ -33,6 +33,7 @@ The key motivation for using this library is to convert iOS Live Photos into And
    :maxdepth: 1
    :caption: Python API
 
+   python_api/top_level
    python_api/motion
    python_api/google
    python_api/samsung

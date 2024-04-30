@@ -1,4 +1,6 @@
-samsung
-=======
+.samsung
+========
 
-TODO: Samsung
+.. automodule:: motionphoto.samsung
+   :members:
+   :show-inheritance:

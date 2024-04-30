@@ -1,4 +1,6 @@
-motion
-======
+.motion
+========
 
-TODO: motion
+.. automodule:: motionphoto.motion
+   :members:
+   :show-inheritance:

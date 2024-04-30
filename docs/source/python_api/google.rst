@@ -1,4 +1,6 @@
-google
-======
+.google
+=======
 
-TODO: Google
+.. automodule:: motionphoto.google
+   :members:
+   :show-inheritance:

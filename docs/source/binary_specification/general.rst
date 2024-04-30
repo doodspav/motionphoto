@@ -3,8 +3,8 @@ General
 
 | This section will cover the reverse engineered binary specification of Motion
   Photos.
-| This section is solely for information, and is NOT required to use the
-  package.
+| This section is solely for information, and is **NOT required to use the
+  package**.
 
 | Since each application/vendor has their own implementation, they also have
   separate specifications.
