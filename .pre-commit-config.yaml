@@ -57,42 +57,47 @@ repos:
       - id: unittest-integration
         name: unittest-integration
         language: script
-        types: [python]
+        types_or: [python, image]
         entry: venv/bin/python
         args: [-m, coverage, run, --data-file=.coverage.integration, --omit="motionphoto/*", --branch, -m, unittest, discover, -s, tests/integration]
         pass_filenames: false
-        always_run: true
 
   - repo: local
     hooks:
       - id: unittest-unit
         name: unittest-unit
         language: script
-        types: [python]
+        types_or: [python, image]
         entry: venv/bin/python
         args: [-m, coverage, run, --data-file=.coverage.unit, --branch, -m, unittest, discover, -s, tests/unit]
         pass_filenames: false
-        always_run: true
 
   - repo: local
     hooks:
       - id: coverage-combine
         name: coverage-combine
         language: script
-        types: [python]
+        types_or: [python, image]
         entry: venv/bin/python
         args: [-m, coverage, combine]
         pass_filenames: false
-        always_run: true
-
 
   - repo: local
     hooks:
       - id: coverage-report
         name: coverage-report
         language: script
-        types: [python]
+        types_or: [python, image]
         entry: venv/bin/python
         args: [-m, coverage, report, --fail-under=100]
         pass_filenames: false
-        always_run: true
+
+  - repo: local
+    hooks:
+      - id: build-docs
+        name: build-docs
+        language: script
+        types_or: [python, markdown, rst]
+        entry: venv/bin/sphinx-build
+        args: [-M, html, docs/source, docs/build, --fresh-env, --nitpicky, --silent, --fail-on-warning, --keep-going, --show-traceback]
+        pass_filenames: false

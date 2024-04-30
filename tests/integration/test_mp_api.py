@@ -3,8 +3,8 @@ from tempfile import TemporaryDirectory
 from typing import List, Optional
 from unittest import TestCase
 
-import helpers
 import motionphoto
+from tests.integration import helpers
 
 
 class TestMotionPhotoApi(TestCase):
@@ -12,7 +12,7 @@ class TestMotionPhotoApi(TestCase):
     def get_image_paths(self) -> List[Path]:
 
         # build up paths
-        data_path = Path(__file__).parent.parent / "data"
+        data_path = Path(__file__).parent / "data"
         jpeg_suffixes = (".jpeg", ".jpg")
         image_paths = [
             p for p in data_path.iterdir() if p.suffix.lower() in jpeg_suffixes

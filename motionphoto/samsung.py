@@ -21,7 +21,7 @@ class SamsungTag:
 
     :ivar int offset: Negative offset from the start of the SEF section to the
                       start of the field in the trailer.
-    :ivar bytes marker: SamsungMarker value for the field.
+    :ivar bytes marker: ``SamsungMarker`` value for the field.
     """
 
     offset: int
@@ -53,7 +53,7 @@ def write_samsung_motion_metadata(
     :param media: Existing media file path.
     :param timestamp_us: Optional key-frame time offset in microseconds.
 
-    :raise: RuntimeError: Calling 'exiftool' returned a non-zero exit code.
+    :raise: RuntimeError: Calling ``exiftool`` returned a non-zero exit code.
     """
 
     # metadata tags required by Samsung

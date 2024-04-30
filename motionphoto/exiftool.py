@@ -7,13 +7,13 @@ from typing import List
 def write_metadata_tags(*, media: Path, tags: List[str]) -> None:
     """
     Update an existing media file with metadata tags using the command line tool
-    'exiftool'.
+    ``exiftool``.
 
     :param media: Existing input media file whose metadata will be updated with
                   the tags.
-    :param tags: List of tags to be written to the media file.
+    :param tags: List of tags to be written to the ``media`` file.
 
-    :raise RuntimeError: Calling 'exiftool' returned a non-zero exit code.
+    :raise RuntimeError: Calling ``exiftool`` returned a non-zero exit code.
     """
 
     # short circuit if we don't have any tags

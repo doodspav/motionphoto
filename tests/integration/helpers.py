@@ -44,20 +44,26 @@ def assert_motion(
     cmd += [f"{motion_path}"]
     res = subprocess.run(cmd, capture_output=True, text=True, check=True)
 
-    # check
+    # check command success
     self.assertEqual(0, res.returncode)
     self.assertTrue(motion_path.exists())
     output = json.loads(res.stdout)[0]
+
+    # check known fields
     for k, v in known_fields.items():
         self.assertIn(k, output)
         self.assertEqual(known_fields[k], output[k])
+
+    # check offset
     self.assertIn("MicroVideoOffset", output)
     with open(motion_path, "rb") as f:
         file_data: bytes = f.read()
         prefix = struct.pack("<I", 16) + b"MotionPhoto_Data"
-        offset = file_data.find(prefix) + len(prefix)
+        offset = file_data.rfind(prefix) + len(prefix)
         negative_offset = len(file_data) - offset
         self.assertEqual(negative_offset, output["MicroVideoOffset"])
+
+    # check timestamp
     if timestamp_us is not None:
         self.assertIn("MotionPhotoPresentationTimestampUs", output)
         self.assertEqual(
