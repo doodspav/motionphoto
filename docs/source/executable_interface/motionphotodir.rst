@@ -1,4 +1,4 @@
 motionphotodir
 ==============
 
-TODO: motionphotodir
+TODO: motionphotodir, GHI #1

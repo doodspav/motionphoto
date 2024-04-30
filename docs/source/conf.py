@@ -27,6 +27,7 @@ extensions = [
     "sphinx.ext.todo",
     # external
     "myst_parser",
+    "sphinxcontrib.programoutput",
 ]
 
 myst_enable_extensions = []

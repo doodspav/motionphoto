@@ -3,3 +3,4 @@ sphinx~=7.3.7
 sphinx-rtd-theme~=2.0.0
 myst-parser~=3.0.0
 docutils>=0.17
+sphinxcontrib-programoutput~=0.17
